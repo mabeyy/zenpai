@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | Asian Home Appliance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="chrome-top"></div>
+
+  <main class="container page-enter">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span>›</span>
+      <a href="index.html" id="crumbCat">Products</a><span>›</span>
+      <span id="crumbName"></span>
+    </nav>
+
+    <section class="pdp">
+      <!-- Gallery -->
+      <div class="panel gallery">
+        <div class="thumbs" id="thumbs"></div>
+        <div class="stage" id="stage">
+          <div class="card-badges" id="stageBadges"></div>
+          <div class="discount-burst" id="stageBurst"></div>
+          <div id="stageArt" style="display:contents"></div>
+          <span class="stage-hint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg>Hover to zoom</span>
+        </div>
+        <ul class="why-buy">
+          <li><span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span><div><b>100% Genuine</b><small>Official warranty</small></div></li>
+          <li><span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="11" rx="1"/><path d="M16 9h4l3 4v4h-7"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span><div><b>Fast Delivery</b><small>2–5 days</small></div></li>
+          <li><span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><div><b>0% Installment</b><small>Up to 24 months</small></div></li>
+          <li><span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></span><div><b>Easy Returns</b><small>7-day replacement</small></div></li>
+        </ul>
+      </div>
+
+      <!-- Product info -->
+      <div class="panel info">
+        <div class="brand-row">
+          <span class="brand-pill" id="brand"></span>
+          <div class="share">
+            <button aria-label="Share" onclick="toast('Product link copied')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+            <button aria-label="Compare" onclick="toast('Added to compare')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M8 21H3v-5M21 3l-7 7M3 21l7-7"/></svg></button>
+          </div>
+        </div>
+        <h1 id="name"></h1>
+        <div class="meta">
+          <span id="rating"></span>
+          <a href="#tabs" data-jump="reviews" id="reviewLink"></a>
+          <span class="dot"></span>
+          <span>Model: <b id="sku"></b></span>
+          <span class="dot"></span>
+          <span id="sold"></span>
+        </div>
+
+        <div class="price-box">
+          <div class="row">
+            <span class="big" id="price"></span>
+            <span class="was" id="was" style="font-size:16px"></span>
+            <span class="save-pill" id="save"></span>
+          </div>
+          <div class="flash-bar">
+            <div class="lbl"><span>⚡ Flash deal stock</span><b id="claimedLbl"></b></div>
+            <div class="bar"><i id="claimedBar"></i></div>
+          </div>
+        </div>
+
+        <div class="opt-label">Package <span>Choose what comes with your unit</span></div>
+        <div class="variants" id="variants"></div>
+
+        <div class="opt-label">Installment Plan <span>0% interest with partner banks</span></div>
+        <div class="inst-grid" id="inst"></div>
+
+        <div class="buy-row">
+          <div class="qty">
+            <button aria-label="Decrease" id="minus"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+            <input id="qty" value="1" inputmode="numeric" aria-label="Quantity">
+            <button aria-label="Increase" id="plus"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          </div>
+          <button class="btn btn-primary" id="addCart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>Add to Cart</button>
+          <button class="btn btn-dark" id="buyNow">Buy Now</button>
+          <button class="wish-btn" id="wishBtn" aria-label="Add to wishlist"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        </div>
+
+        <div class="freebie">
+          <span class="gift"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16181d" stroke-width="2.2"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v9h14v-9M12 8S10 3 7.5 4 9 8 12 8zM12 8s2-5 4.5-4S15 8 12 8z"/></svg></span>
+          <span><b>FREE item with purchase</b>Get a Hanabishi 2-in-1 Electric Kettle (worth ₱1,299) while supplies last.</span>
+        </div>
+
+        <div class="delivery">
+          <div>
+            <span class="di"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="11" rx="1"/><path d="M16 9h4l3 4v4h-7"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
+            <span><b>Free delivery in Metro Manila</b>Estimated arrival <span id="eta"></span>. Delivery details are confirmed with your order.</span>
+          </div>
+          <div>
+            <span class="di"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-6.5-8-13a8 8 0 0 1 16 0c0 6.5-8 13-8 13z"/><circle cx="12" cy="9" r="3"/></svg></span>
+            <span><b>Pick up in store <span class="branch-status" id="branchStatus">● Available</span></b>
+              <div class="dd branch-dd" id="branch">
+                <button class="dd-btn branch-btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Select a branch">
+                  <span class="dd-label">Select a branch</span>
+                  <svg class="dd-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                <ul class="dd-menu" role="listbox" tabindex="-1" aria-label="Branches" id="branchMenu"></ul>
+              </div>
+            </span>
+          </div>
+          <div>
+            <span class="di"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <span><b>Official brand warranty</b>Covered by <span id="warrantyBrand"></span> Philippines — parts and service nationwide.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Frequently bought together -->
+    <section class="panel fbt reveal" aria-labelledby="fbtTitle">
+      <div class="fbt-head">
+        <h2 id="fbtTitle">Frequently bought together</h2>
+        <span>Complete your setup in one checkout</span>
+      </div>
+      <div class="fbt-body">
+        <div class="fbt-items" id="fbtItems"></div>
+        <div class="fbt-total">
+          <small>Total for <b id="fbtCount">3</b> items</small>
+          <strong id="fbtPrice"></strong>
+          <span id="fbtMonthly"></span>
+          <button class="btn btn-primary" id="fbtAdd"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg><span id="fbtBtnText">Add all 3 to cart</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="panel tabs-wrap reveal" id="tabs">
+      <div class="tabs" role="tablist">
+        <button class="on" data-tab="overview" role="tab">Overview</button>
+        <button data-tab="specs" role="tab">Specifications</button>
+        <button data-tab="reviews" role="tab">Reviews</button>
+        <button data-tab="payment" role="tab">Payment & Delivery</button>
+        <span class="tab-ink" id="tabInk"></span>
+      </div>
+
+      <div class="tab-pane on" data-pane="overview">
+        <p class="desc-lead" id="lead"></p>
+        <div class="features">
+          <div class="feature"><span class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></span><b>Inverter Energy Saving</b><p>Uses up to 50% less power than conventional units — lower Meralco bills, month after month.</p></div>
+          <div class="feature"><span class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg></span><b>Smart Cooling Flow</b><p>Even airflow keeps every corner at the right temperature for longer-lasting freshness.</p></div>
+          <div class="feature"><span class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></span><b>App Connected</b><p>Monitor and control settings from your phone, wherever you are.</p></div>
+          <div class="feature"><span class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7"/></svg></span><b>Whisper-Quiet</b><p>Low-noise operation designed for open-plan Filipino homes and condos.</p></div>
+          <div class="feature"><span class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><b>10-Year Compressor Warranty</b><p>Long-term peace of mind backed by the manufacturer.</p></div>
+          <div class="feature"><span class="fi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></span><b>Voltage Fluctuation Safe</b><p>Built-in stabilizer protects against brownouts and power surges.</p></div>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-pane="specs">
+        <table class="spec-table" id="specs"></table>
+      </div>
+
+      <div class="tab-pane" data-pane="reviews">
+        <div class="reviews">
+          <div class="score">
+            <div class="big" id="scoreBig"></div>
+            <div id="scoreStars" style="display:flex;justify-content:center;margin:8px 0"></div>
+            <small id="scoreCount" style="color:var(--ink-3)"></small>
+            <div class="dist" id="dist"></div>
+            <button class="btn btn-ghost" style="width:100%;margin-top:18px" onclick="toast('Thanks! Review form coming soon')">Write a Review</button>
+          </div>
+          <div>
+            <div class="rv-tools">
+              <div class="rv-filters" id="rvFilters" role="group" aria-label="Filter reviews"></div>
+              <div class="rv-sort" role="group" aria-label="Sort reviews">
+                <button class="on" data-sort="helpful">Most helpful</button><button data-sort="newest">Newest</button>
+              </div>
+            </div>
+            <div id="reviewList"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-pane="payment">
+        <table class="spec-table">
+          <tr><td>Credit Card Installment</td><td>0% for 3, 6, 12 & 24 months — BDO, BPI, Metrobank, RCBC, Security Bank</td></tr>
+          <tr><td>Buy Now, Pay Later</td><td>Home Credit, BillEase, Atome</td></tr>
+          <tr><td>E-Wallets</td><td>GCash, Maya</td></tr>
+          <tr><td>Cash / Debit</td><td>Pay in store upon pickup</td></tr>
+          <tr><td>Delivery</td><td>Free within Metro Manila for orders ₱10,000 and up · Provincial rates apply</td></tr>
+          <tr><td>Returns</td><td>7-day replacement for factory defects</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- Related -->
+    <section class="reveal" style="margin-bottom:40px">
+      <div class="section-head">
+        <h2>You may also like</h2>
+        <div class="arrows">
+          <button aria-label="Previous" id="prev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button aria-label="Next" id="next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="rail" id="rail"></div>
+    </section>
+  </main>
+
+  <!-- Sticky buy bar -->
+  <div class="sticky-buy" id="stickyBuy">
+    <div class="container">
+      <span class="mini" id="miniArt"></span>
+      <div class="t"><b id="miniName"></b><span id="miniPrice"></span></div>
+      <button class="btn btn-ghost" onclick="document.getElementById('buyNow').click()">Buy Now</button>
+      <button class="btn btn-primary" id="stickyAdd">Add to Cart</button>
+    </div>
+  </div>
+
+  <div id="chrome-bottom"></div>
+
+  <script src="data.js"></script>
+  <script>
+    const id = +new URLSearchParams(location.search).get("id") || 1;
+    const p = PRODUCTS.find(x => x.id === id) || PRODUCTS[0];
+    renderChrome(p.cat);
+    document.title = `${p.name} | Asian Home Appliance`;
+
+    const $ = s => document.getElementById(s);
+    const d = discountOf(p);
+    let price = p.price, was = p.was;
+
+    /* Breadcrumb + header info */
+    $("crumbCat").textContent = p.cat;
+    $("crumbCat").href = `index.html?cat=${encodeURIComponent(p.cat)}`;
+    $("crumbName").textContent = p.name.split(" ").slice(0, 5).join(" ") + "…";
+    $("brand").textContent = p.brand;
+    $("warrantyBrand").textContent = p.brand;
+    $("name").textContent = p.name;
+    $("rating").innerHTML = `${starsHTML(p.rating)}`;
+    $("reviewLink").textContent = `${p.rating} · ${p.reviews} reviews`;
+    $("sku").textContent = p.model || `AHA-${String(p.id).padStart(5, "0")}`;
+    $("sold").textContent = `${(p.reviews * 3.4).toFixed(0)} sold`;
+
+    /* Price with count-up */
+    function setPrice() {
+      const from = +($("price").dataset.v || price * .85);
+      $("price").dataset.v = price;
+      const t0 = performance.now();
+      (function step(t) {
+        const k = Math.min(1, (t - t0) / 600), e = 1 - Math.pow(1 - k, 3);
+        $("price").textContent = peso(from + (price - from) * e);
+        if (k < 1) requestAnimationFrame(step);
+      })(t0);
+      $("was").textContent = was > price ? peso(was) : "";
+      $("save").textContent = was > price ? `Save ${peso(was - price)}` : "Best Price";
+      $("miniPrice").textContent = peso(price);
+      renderInst();
+    }
+
+    /* Flash deal progress */
+    const claimed = Math.min(92, 40 + (p.reviews % 50));
+    $("claimedLbl").textContent = `${claimed}% claimed`;
+    setTimeout(() => $("claimedBar").style.width = claimed + "%", 400);
+
+    /* Gallery: full product shot + close-up crops of the real photo (illustration if no photo) */
+    const views = p.img
+      ? [["Front", 1, "50% 50%"], ["Top close-up", 1.5, "50% 25%"], ["Bottom close-up", 1.5, "50% 80%"]]
+      : [["Front", 1, "50% 50%"]];
+    const viewHTML = ([label, s, o], cls = "") =>
+      `<span class="view-wrap" style="transform:scale(${s});transform-origin:${o}">${visual(p, cls)}</span>`;
+    $("thumbs").innerHTML = views.map((v, i) => `<button class="${i ? "" : "on"}" data-view="${i}" aria-label="${v[0]}">${viewHTML(v)}</button>`).join("");
+    function showView(i) {
+      $("stageArt").innerHTML = viewHTML(views[i], "swap");
+      document.querySelectorAll("#thumbs button").forEach((b, j) => b.classList.toggle("on", i === j));
+    }
+    $("thumbs").addEventListener("click", e => { const b = e.target.closest("[data-view]"); if (b) showView(+b.dataset.view); });
+    showView(0);
+    $("stageBadges").innerHTML = p.tags.map(t => `<span class="tag ${t}">${{ sale: "Sale", hot: "Hot Item", new: "New", free: "Free Delivery" }[t]}</span>`).join("");
+    if (d > 0) $("stageBurst").innerHTML = `-${d}%<small>OFF</small>`; else $("stageBurst").remove();
+
+    /* Hover zoom following the cursor */
+    const stage = $("stage");
+    stage.addEventListener("mousemove", e => {
+      const r = stage.getBoundingClientRect();
+      const art = stage.querySelector(".art");
+      art.style.transformOrigin = `${(e.clientX - r.left) / r.width * 100}% ${(e.clientY - r.top) / r.height * 100}%`;
+      stage.classList.add("zoom");
+    });
+    stage.addEventListener("mouseleave", () => stage.classList.remove("zoom"));
+
+    /* Package options (add-on services change the price) */
+    const installFee = { "Air Conditioners": 2500, "Washing Machines": 800, "Kitchen Appliances": 1500, Televisions: 1200 }[p.cat] || 0;
+    const warrantyFee = Math.round(p.price * .06 / 100) * 100 - 1;
+    const packages = [
+      ["Unit only", "Standard warranty", 0],
+      ...(installFee ? [["With installation", p.cat === "Televisions" ? "Wall-mount setup" : "Certified technician", installFee]] : []),
+      [installFee ? "Install + 2-yr protection" : "+ 2-yr protection", "Extended warranty", installFee + warrantyFee],
+    ];
+    $("variants").innerHTML = packages.map(([t, sub, add], i) =>
+      `<button class="variant ${i ? "" : "on"}" data-extra="${add}">${t}<small>${add ? "+" + peso(add) : sub}</small></button>`).join("");
+    $("variants").addEventListener("click", e => {
+      const v = e.target.closest(".variant"); if (!v) return;
+      document.querySelectorAll(".variant").forEach(x => x.classList.toggle("on", x === v));
+      price = p.price + +v.dataset.extra; was = p.was + +v.dataset.extra;
+      setPrice();
+    });
+    const sizeFromName = (p.name.match(/\d+(\.\d+)?\s?(cu\.ft\.|kg|HP|")/i) || ["—"])[0];
+
+    /* Installment options */
+    let months = 12;
+    function renderInst() {
+      $("inst").innerHTML = [3, 6, 12, 24].map(m => `<button class="inst ${m === months ? "on" : ""}" data-m="${m}">${m} months<b>${peso(price / m)}</b><span class="zero">0% interest</span></button>`).join("");
+    }
+    $("inst").addEventListener("click", e => { const b = e.target.closest(".inst"); if (b) { months = +b.dataset.m; renderInst(); } });
+    setPrice();
+
+    /* Quantity */
+    const qty = $("qty");
+    const clamp = v => Math.max(1, Math.min(p.stock, v || 1));
+    $("minus").onclick = () => qty.value = clamp(+qty.value - 1);
+    $("plus").onclick = () => qty.value = clamp(+qty.value + 1);
+    qty.onchange = () => qty.value = clamp(+qty.value);
+
+    /* Cart / buy / wishlist */
+    $("addCart").onclick = e => addToCart(p, e.currentTarget, +qty.value);
+    $("stickyAdd").onclick = e => addToCart(p, e.currentTarget, +qty.value);
+    $("buyNow").onclick = () => toast("Proceeding to secure checkout…");
+    const wishBtn = $("wishBtn");
+    wishBtn.classList.toggle("on", wishlist().includes(p.id));
+    wishBtn.onclick = () => toggleWish(p.id, wishBtn);
+
+    /* Delivery ETA + branch stock */
+    const eta = new Date(); eta.setDate(eta.getDate() + 3);
+    const eta2 = new Date(); eta2.setDate(eta2.getDate() + 5);
+    const fmt = x => x.toLocaleDateString("en-PH", { month: "short", day: "numeric" });
+    $("eta").textContent = `${fmt(eta)} – ${fmt(eta2)}`;
+    /* Branch picker: custom dropdown with per-branch stock */
+    const BRANCHES = [
+      ["Cubao", "Quezon City", "Aurora Blvd."], ["Sta. Cruz", "Manila", "Rizal Ave."], ["Monumento", "Caloocan", "EDSA cor. Rizal Ave."],
+      ["Ortigas", "Pasig", "Ortigas Ave."], ["Guadalupe", "Makati", "EDSA Guadalupe"], ["Marcos Hwy", "Antipolo", "Marcos Highway"],
+    ];
+    const stockAt = i => (i + p.id) % 3 === 0 ? 2 : 0;   // 2 = only a few left, 0 = in stock (sample data)
+    $("branchMenu").innerHTML = BRANCHES.map(([b, city, street], i) => `
+      <li role="option" data-value="${i}" data-short="${b}, ${city}">
+        <span class="si"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s-8-6.5-8-13a8 8 0 0 1 16 0c0 6.5-8 13-8 13z"/><circle cx="12" cy="9" r="3"/></svg></span>
+        <span class="bt"><b>${b}</b><small>${city} · ${street}</small></span>
+        <span class="bs ${stockAt(i) ? "low" : ""}">${stockAt(i) ? "2 left" : "In stock"}</span>
+      </li>`).join("");
+    dropdown($("branch"), v => {
+      const low = stockAt(+v);
+      const s = $("branchStatus");
+      s.textContent = low ? "● Only 2 left here" : "● Ready for pickup today";
+      s.style.color = low ? "#b45309" : "";
+      s.animate([{ transform: "scale(.7)", opacity: 0 }, { transform: "none", opacity: 1 }], { duration: 300, easing: "ease-out" });
+    });
+
+    /* Tabs with sliding ink */
+    const ink = $("tabInk");
+    function selectTab(name) {
+      document.querySelectorAll("[data-tab]").forEach(b => {
+        const on = b.dataset.tab === name;
+        b.classList.toggle("on", on);
+        if (on) { ink.style.left = b.offsetLeft + "px"; ink.style.width = b.offsetWidth + "px"; }
+      });
+      document.querySelectorAll("[data-pane]").forEach(x => x.classList.toggle("on", x.dataset.pane === name));
+      if (name === "reviews") animateDist();
+    }
+    document.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => selectTab(b.dataset.tab));
+    $("reviewLink").onclick = () => selectTab("reviews");
+    addEventListener("load", () => selectTab("overview"));
+    addEventListener("resize", () => selectTab(document.querySelector("[data-tab].on").dataset.tab));
+
+    /* Overview + specs */
+    $("lead").textContent = `Upgrade your home with the ${p.name}. Built for everyday Filipino living, it combines dependable ${p.brand} engineering with modern energy-saving technology — and it's 100% genuine with full manufacturer warranty when you buy from Asian Home Appliance.`;
+    const specs = [
+      ["Brand", p.brand], ["Model", p.model], ["Category", p.cat],
+      ["Capacity / Size", sizeFromName], ["Energy Efficiency", "5-Star EEF Rating"],
+      ["Power Supply", "220V / 60Hz"], ["Color", "As pictured"], ["Warranty", "2 years parts & labor · 10 years compressor/motor"],
+      ["Dimensions (W×H×D)", "60 × 165 × 65 cm"], ["Net Weight", "48 kg"],
+    ];
+    $("specs").innerHTML = specs.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("");
+
+    /* Reviews */
+    $("scoreBig").textContent = p.rating.toFixed(1);
+    $("scoreStars").innerHTML = starsHTML(p.rating);
+    $("scoreCount").textContent = `Based on ${p.reviews} reviews`;
+    const dist = [72, 18, 6, 3, 1];
+    $("dist").innerHTML = dist.map((v, i) => `<button data-star="${5 - i}" aria-label="Show ${5 - i}-star reviews"><span>${5 - i}★</span><span class="bar"><i data-w="${v}"></i></span><span>${v}%</span></button>`).join("");
+    function animateDist() { setTimeout(() => document.querySelectorAll("#dist i").forEach(i => i.style.width = i.dataset.w + "%"), 80); }
+    /* Sample reviews with filter (stars / photos), sort and "helpful" votes */
+    const REVIEWS = [
+      { n: "Maria S.", c: "#e30b0e", r: 5, d: 12, h: 48, photo: true, t: "Delivered on time and the installers were very professional. Super tipid sa kuryente — our bill dropped noticeably the first month!" },
+      { n: "Jun R.", c: "#1f6feb", r: 5, d: 30, h: 31, t: "Got it on 0% installment with my BDO card, very easy process. The unit is quiet and works perfectly." },
+      { n: "Carla D.", c: "#12a150", r: 4, d: 34, h: 22, photo: true, t: "Good value for the price. Picked it up at the Cubao branch — staff were helpful. Would have loved more color options." },
+      { n: "Paolo M.", c: "#7a3cff", r: 5, d: 3, h: 9, t: "Second unit we bought from Asian Home Appliance. Same quality, same smooth delivery. Highly recommended!" },
+      { n: "Grace L.", c: "#ff7a00", r: 4, d: 60, h: 14, t: "Works great so far. Delivery took 4 days to Antipolo but they kept me updated through SMS the whole time." },
+      { n: "Ramon T.", c: "#0e7a3e", r: 3, d: 75, h: 6, t: "Product is fine but the box arrived a bit dented. Customer service replaced the accessory pack quickly though." },
+    ];
+    const voted = new Set();
+    let rvFilter = "all", rvSort = "helpful";
+    const ago = days => days < 7 ? `${days} days ago` : days < 30 ? `${Math.round(days / 7)} weeks ago` : `${Math.round(days / 30)} month${days >= 45 ? "s" : ""} ago`;
+    const FILTERS = [["all", "All"], ["5", "5★"], ["4", "4★"], ["3", "3★ & below"], ["photo", "With photos"]];
+    const countFor = f => REVIEWS.filter(rv => f === "all" || (f === "photo" ? rv.photo : f === "3" ? rv.r <= 3 : rv.r === +f)).length;
+    $("rvFilters").innerHTML = FILTERS.map(([k, l]) => `<button data-f="${k}" class="${k === "all" ? "on" : ""}">${l} <em>${countFor(k)}</em></button>`).join("");
+    function renderReviews() {
+      let list = REVIEWS.filter(rv => rvFilter === "all" || (rvFilter === "photo" ? rv.photo : rvFilter === "3" ? rv.r <= 3 : rv.r === +rvFilter));
+      list = [...list].sort(rvSort === "helpful" ? (a, b) => b.h - a.h : (a, b) => a.d - b.d);
+      $("reviewList").innerHTML = list.length ? list.map((rv, i) => `
+        <div class="review" style="--i:${i}">
+          <div class="review-head"><span class="avatar" style="background:${rv.c}">${rv.n[0]}</span><span><b>${rv.n}</b><small>${ago(rv.d)}</small></span><span class="verified">✓ Verified Purchase</span></div>
+          ${starsHTML(rv.r)}<p style="margin-top:8px">${rv.t}</p>
+          ${rv.photo ? `<div class="rv-photos"><span>${visual(p)}</span><span class="rv-photo-2">${visual(p)}</span></div>` : ""}
+          <button class="rv-helpful ${voted.has(rv.n) ? "on" : ""}" data-help="${rv.n}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10v12M15 5.9L14 10h5.8a2 2 0 0 1 2 2.3l-1.4 8A2 2 0 0 1 18.5 22H7V10l4-8a3 3 0 0 1 4 3.9z"/></svg>
+            Helpful (${rv.h + (voted.has(rv.n) ? 1 : 0)})
+          </button>
+        </div>`).join("") : `<p class="rv-empty">No reviews match this filter yet.</p>`;
+    }
+    $("rvFilters").addEventListener("click", e => {
+      const b = e.target.closest("[data-f]"); if (!b) return;
+      rvFilter = b.dataset.f;
+      $("rvFilters").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+      renderReviews();
+    });
+    document.querySelector(".rv-sort").addEventListener("click", e => {
+      const b = e.target.closest("[data-sort]"); if (!b) return;
+      rvSort = b.dataset.sort;
+      document.querySelectorAll(".rv-sort button").forEach(x => x.classList.toggle("on", x === b));
+      renderReviews();
+    });
+    $("reviewList").addEventListener("click", e => {
+      const b = e.target.closest("[data-help]"); if (!b) return;
+      voted.has(b.dataset.help) ? voted.delete(b.dataset.help) : voted.add(b.dataset.help);
+      renderReviews();
+    });
+    /* clicking a star row in the breakdown filters the list */
+    $("dist").addEventListener("click", e => {
+      const row = e.target.closest("[data-star]"); if (!row) return;
+      const f = row.dataset.star >= 4 ? row.dataset.star : "3";
+      $("rvFilters").querySelector(`[data-f="${f}"]`).click();
+    });
+    renderReviews();
+
+    /* Frequently bought together: this product + the most affordable picks from complementary categories */
+    const COMPLEMENT = {
+      Refrigerators: ["Kitchen Appliances", "Fans"], Televisions: ["Audio", "Fans"], "Air Conditioners": ["Fans", "Audio"],
+      "Washing Machines": ["Fans", "Kitchen Appliances"], Fans: ["Audio", "Kitchen Appliances"],
+      "Kitchen Appliances": ["Fans", "Refrigerators"], Audio: ["Televisions", "Fans"],
+    };
+    const bundle = [p, ...COMPLEMENT[p.cat].map(c => PRODUCTS.filter(x => x.cat === c && x.id !== p.id).sort((a, b) => a.price - b.price)[0]).filter(Boolean)];
+    const picked = new Set(bundle.map(x => x.id));
+    $("fbtItems").innerHTML = bundle.map((x, i) => `
+      ${i ? '<span class="fbt-plus" aria-hidden="true">+</span>' : ""}
+      <label class="fbt-item ${i ? "" : "this"}">
+        <input type="checkbox" checked data-fbt="${x.id}" ${i ? "" : "disabled"} aria-label="Include ${x.name}">
+        <span class="fbt-check"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>
+        <a class="fbt-img" href="product.html?id=${x.id}">${visual(x)}</a>
+        <span class="fbt-info">
+          <small>${i ? x.cat : "This item"}</small>
+          <b>${x.name}</b>
+          <span class="price">${peso(x.price)}</span>
+        </span>
+      </label>`).join("");
+    function fbtTotals() {
+      const items = bundle.filter(x => picked.has(x.id));
+      const total = items.reduce((s, x) => s + x.price, 0);
+      $("fbtCount").textContent = items.length;
+      $("fbtPrice").textContent = peso(total);
+      $("fbtMonthly").textContent = `or ${peso(total / 12)}/mo · 0% for 12 months`;
+      $("fbtBtnText").textContent = items.length > 1 ? `Add all ${items.length} to cart` : "Add to cart";
+      $("fbtPrice").animate([{ transform: "translateY(-4px)", opacity: .4 }, { transform: "none", opacity: 1 }], { duration: 300, easing: "ease-out" });
+    }
+    $("fbtItems").addEventListener("change", e => {
+      const id = +e.target.dataset.fbt; if (!id) return;
+      e.target.checked ? picked.add(id) : picked.delete(id);
+      e.target.closest(".fbt-item").classList.toggle("off", !e.target.checked);
+      fbtTotals();
+    });
+    $("fbtAdd").addEventListener("click", e => {
+      const btn = e.currentTarget;
+      bundle.filter(x => picked.has(x.id)).forEach((x, i) => setTimeout(() => addToCart(x, btn), i * 180));
+    });
+    fbtTotals();
+
+    /* Related products rail */
+    const related = [...PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id), ...PRODUCTS.filter(x => x.cat !== p.cat)].slice(0, 8);
+    $("rail").innerHTML = related.map(cardHTML).join("");
+    const rail = $("rail");
+    $("next").onclick = () => rail.scrollBy({ left: rail.clientWidth * .75 });
+    $("prev").onclick = () => rail.scrollBy({ left: -rail.clientWidth * .75 });
+
+    /* Sticky buy bar appears once the main buy buttons scroll out of view */
+    $("miniArt").innerHTML = visual(p);
+    $("miniName").textContent = p.name;
+    new IntersectionObserver(([en]) => $("stickyBuy").classList.toggle("show", !en.isIntersecting && en.boundingClientRect.top < 0))
+      .observe(document.querySelector(".buy-row"));
+  </script>
+</body>
+</html>

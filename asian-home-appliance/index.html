@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Products | Asian Home Appliance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="chrome-top"></div>
+
+  <main class="container page-enter">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span>›</span><span id="crumbCat">All Products</span>
+    </nav>
+
+    <!-- Flash sale hero -->
+    <section class="plp-hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><i></i>Flash Sale · Today Only</span>
+        <h1>Big Home<br>Upgrade Sale</h1>
+        <div class="hero-deal">
+          <span class="upto">Up<br>to</span>
+          <span class="pct">30<sup>%</sup></span>
+          <span class="off">OFF</span>
+        </div>
+        <p>Top brands with <b>0% installment</b> up to 24 months and <b>free delivery</b> on qualified orders.</p>
+        <div class="hero-row">
+          <a class="btn hero-cta" href="#listing">Shop the Sale
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <div class="countdown" id="countdown" aria-label="Sale ends in">
+            <span class="cd-label">Ends in</span>
+            <div><b data-u="h">00</b><small>Hrs</small></div><i>:</i>
+            <div><b data-u="m">00</b><small>Min</small></div><i>:</i>
+            <div><b data-u="s">00</b><small>Sec</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-stage" id="heroArt" aria-hidden="true"></div>
+    </section>
+
+    <!-- Category tiles -->
+    <section class="cat-tiles" id="catTiles"></section>
+
+
+    <!-- Flash deals -->
+    <section class="deals reveal" aria-labelledby="dealsTitle">
+      <div class="section-head">
+        <div class="deals-title">
+          <h2 id="dealsTitle"><span class="bolt">⚡</span> Flash Deals</h2>
+          <span class="deals-timer">Ends in <b id="dealsTimer">00:00:00</b></span>
+        </div>
+        <div class="arrows">
+          <button aria-label="Previous deals" id="dealsPrev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button aria-label="Next deals" id="dealsNext"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="rail deals-rail" id="dealsRail"></div>
+    </section>
+
+    <!-- Brands -->
+    <section class="brands reveal" aria-labelledby="brandsTitle">
+      <div class="section-head">
+        <h2 id="brandsTitle">Shop by Brand</h2>
+        <span class="brands-sub">Official dealer of the brands you trust</span>
+      </div>
+      <div class="brand-marquee"><div class="brand-track" id="brandTrack"></div></div>
+    </section>
+
+    <!-- Listing -->
+    <section class="plp" id="listing">
+      <aside class="filters" id="filters" aria-label="Filters">
+        <div class="filters-head">
+          <h3>Filters</h3>
+          <button id="clearAll">Clear all</button>
+        </div>
+
+        <details class="f-group" open>
+          <summary>Category <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="f-body" id="fCat"></div>
+        </details>
+
+        <details class="f-group" open>
+          <summary>Brand <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="f-body" id="fBrand"></div>
+        </details>
+
+        <details class="f-group" open>
+          <summary>Price <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="f-body price-range">
+            <div class="dual-range" id="dualRange">
+              <div class="dr-track"><i class="dr-fill" id="drFill"></i></div>
+              <input type="range" id="priceMin" min="0" max="70000" step="500" value="0" aria-label="Minimum price">
+              <input type="range" id="priceMax" min="0" max="70000" step="500" value="70000" aria-label="Maximum price">
+            </div>
+            <div class="price-inputs">
+              <label><small>Min</small><span>₱</span><input type="text" inputmode="numeric" id="minBox" value="0" aria-label="Minimum price"></label>
+              <i class="dash"></i>
+              <label><small>Max</small><span>₱</span><input type="text" inputmode="numeric" id="maxBox" value="70,000" aria-label="Maximum price"></label>
+            </div>
+            <div class="price-presets" id="pricePresets">
+              <button type="button" data-min="0" data-max="5000">Under ₱5k</button>
+              <button type="button" data-min="5000" data-max="20000">₱5k – ₱20k</button>
+              <button type="button" data-min="20000" data-max="50000">₱20k – ₱50k</button>
+              <button type="button" data-min="50000" data-max="70000">₱50k+</button>
+            </div>
+          </div>
+        </details>
+
+        <details class="f-group" open>
+          <summary>Promos <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="f-body" id="fTag"></div>
+        </details>
+
+        <details class="f-group">
+          <summary>Customer Rating <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="f-body" id="fRating"></div>
+        </details>
+
+        <a class="filter-promo" href="#" aria-label="0% installment up to 24 months — see plans">
+          <div class="fp-card" aria-hidden="true">
+            <span class="fp-chip"></span>
+            <span class="fp-wave"></span>
+            <span class="fp-num">•••• 24</span>
+            <span class="fp-brand"><i></i><i></i></span>
+          </div>
+          <span class="fp-eyebrow"><i></i>Pay Later</span>
+          <p class="fp-title"><b>0%</b> interest<br>up to <b>24 months</b></p>
+          <div class="fp-calc">
+            <span>₱38,800 Hitachi aircon</span>
+            <strong>₱1,617<small>/mo</small></strong>
+          </div>
+          <div class="fp-banks"><span>BDO</span><span>BPI</span><span>Metrobank</span><span>+3</span></div>
+          <span class="fp-cta">See installment plans <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </aside>
+
+      <div>
+        <div class="toolbar">
+          <button class="btn btn-ghost mobile-filter-btn" id="openFilters">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filters
+          </button>
+          <p class="count">Showing <b id="count">0</b> products</p>
+          <div class="toolbar-right">
+            <div class="dd sort" id="sort">
+              <button class="dd-btn sort-btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Sort products">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+                <span class="sort-text"><small>Sort by</small><b class="dd-label">Most Popular</b></span>
+                <svg class="dd-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <ul class="dd-menu" role="listbox" tabindex="-1" aria-label="Sort by">
+                <li role="option" data-value="pop" aria-selected="true"><span class="si">🔥</span>Most Popular</li>
+                <li role="option" data-value="low"><span class="si">↑</span>Price: Low to High</li>
+                <li role="option" data-value="high"><span class="si">↓</span>Price: High to Low</li>
+                <li role="option" data-value="disc"><span class="si">%</span>Biggest Discount</li>
+                <li role="option" data-value="rating"><span class="si">★</span>Top Rated</li>
+              </ul>
+            </div>
+            <div class="view-toggle" role="group" aria-label="View">
+              <button class="on" data-view="grid" aria-label="Grid view"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></button>
+              <button data-view="list" aria-label="List view"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="18" height="4" rx="2"/><rect x="3" y="10" width="18" height="4" rx="2"/><rect x="3" y="16" width="18" height="4" rx="2"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="active-chips" id="chips"></div>
+        <div class="grid" id="grid"></div>
+        <div class="pagination" id="pager"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="scrim" id="scrim"></div>
+  <!-- All categories modal -->
+  <div class="modal cat-modal" id="catModal" role="dialog" aria-modal="true" aria-labelledby="catModalTitle" aria-hidden="true">
+    <div class="cm-panel">
+      <header class="cm-head">
+        <div>
+          <h2 id="catModalTitle">Browse all categories</h2>
+          <p>Find what you need for every room.</p>
+        </div>
+        <button class="x-btn" data-close aria-label="Close categories"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </header>
+      <div class="cm-body">
+        <div class="cm-sec"><h4>Shop online</h4><span id="cmTotal"></span></div>
+        <div class="cm-grid" id="cmGrid"></div>
+        <div class="cm-sec"><h4><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s-8-6.5-8-13a8 8 0 0 1 16 0c0 6.5-8 13-8 13z"/><circle cx="12" cy="9" r="3"/></svg>Available at our branches</h4></div>
+        <div class="cm-depts" id="cmDepts"></div>
+      </div>
+    </div>
+  </div>
+  <div id="chrome-bottom"></div>
+
+  <script src="data.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const state = {
+      cats: new Set(params.get("cat") ? [params.get("cat")] : []),
+      brands: new Set(),
+      tags: new Set(params.get("tag") ? [params.get("tag")] : []),
+      minPrice: 0,
+      maxPrice: 70000,
+      minRating: 0,
+      sort: "pop",
+      q: (params.get("q") || "").toLowerCase(),
+      page: 1,
+    };
+    const PER_PAGE = 12;
+    const TAG_LABEL = { sale: "On Sale", hot: "Hot Items", new: "New Arrivals", free: "Free Delivery" };
+
+    renderChrome(params.get("cat"));
+
+    /* Hero art */
+    document.getElementById("heroArt").innerHTML = `
+      <span class="podium"></span>
+      <span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span>
+      <div class="hs-item hs-tv">${ART.tv()}</div>
+      <div class="hs-item hs-fridge">${ART.sbs("#d3d7de")}</div>
+      <div class="hs-item hs-fan">${ART.fan("#ffb800")}</div>
+      <span class="hs-tag t1"><b>-23%</b> Smart TVs</span>
+      <span class="hs-tag t2">from <b>₱225</b>/mo</span>
+      <span class="hs-tag t3">🚚 Free delivery</span>`;
+
+    /* Countdown to midnight */
+    function tick() {
+      const end = new Date(); end.setHours(23, 59, 59, 999);
+      let s = Math.max(0, Math.floor((end - new Date()) / 1000));
+      const parts = { h: Math.floor(s / 3600), m: Math.floor(s % 3600 / 60), s: s % 60 };
+      document.getElementById("dealsTimer").textContent = [parts.h, parts.m, parts.s].map(n => String(n).padStart(2, "0")).join(":");
+      document.querySelectorAll("#countdown b").forEach(b => {
+        const v = String(parts[b.dataset.u]).padStart(2, "0");
+        if (b.textContent !== v) { b.textContent = v; b.animate([{ transform: "translateY(-6px)", opacity: .2 }, { transform: "none", opacity: 1 }], { duration: 350, easing: "ease-out" }); }
+      });
+    }
+    tick(); setInterval(tick, 1000);
+
+    /* Category tiles */
+    const tiles = document.getElementById("catTiles");
+    tiles.innerHTML = [["all", "All"], ...CATEGORIES.map(c => [c, c.replace(" Appliances", "").replace("Washing Machines", "Washers").replace("Air Conditioners", "Aircons")])]
+      .map(([key, label]) => `<button class="cat-tile" data-tile="${key}"><span class="ico">${CAT_ICON[key]}</span>${label}</button>`).join("")
+      + `<button class="cat-tile more" id="openCats" aria-haspopup="dialog"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1.8"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1.8"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1.8"/><path d="M17.25 14v6.5M14 17.25h6.5"/></svg></span>View all</button>`;
+    tiles.addEventListener("click", e => {
+      if (e.target.closest("#openCats")) return openCatModal();
+      const t = e.target.closest("[data-tile]"); if (!t) return;
+      state.cats.clear();
+      if (t.dataset.tile !== "all") state.cats.add(t.dataset.tile);
+      syncChecks(); update(true);
+    });
+
+    /* All-categories modal: compact icon list (appliance categories + sample in-store departments) */
+    const ico = paths => `<svg viewBox="0 0 24 24" fill="none" stroke="#e30b0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+    const DEPTS = [
+      ["Furniture", ico('<path d="M4 11V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3"/><path d="M2 13a2 2 0 0 1 4 0v2h12v-2a2 2 0 0 1 4 0v5H2z"/><path d="M5 18v2M19 18v2"/>')],
+      ["Mobile & Tablets", ico('<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>')],
+      ["Personal Care", ico('<path d="M14 6a6 6 0 1 0 0 8"/><path d="M14 6h7v8h-7"/><path d="M9 14l-2 8"/>')],
+      ["Water Heaters", ico('<path d="M12 2s6 7 6 12a6 6 0 0 1-12 0c0-5 6-12 6-12z"/>')],
+      ["Ventilation", ico('<circle cx="12" cy="12" r="9"/><path d="M12 12c0-4 2-6 4-6M12 12c-4 0-6 2-6 4M12 12c0 4-2 6-4 6M12 12c4 0 6-2 6-4"/>')],
+    ];
+    const arrow = `<svg class="cm-go" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>`;
+    const tile = (key, icon, name, count, cls = "") =>
+      `<button class="cm-tile ${cls}" data-cm-cat="${key}"><span class="ico">${icon}</span><span class="cm-t"><b>${name}</b><small>${count} items</small></span>${arrow}</button>`;
+    document.getElementById("cmTotal").textContent = `${PRODUCTS.length} products`;
+    document.getElementById("cmGrid").innerHTML =
+      tile("all", CAT_ICON.all, "All Products", PRODUCTS.length, "all") +
+      CATEGORIES.map(c => tile(c, CAT_ICON[c], c, PRODUCTS.filter(p => p.cat === c).length)).join("");
+    document.getElementById("cmDepts").innerHTML =
+      DEPTS.map(([t, icon]) => `<button class="cm-dept" data-dept="${t}">${icon}${t}</button>`).join("");
+    const catModal = document.getElementById("catModal");
+    function openCatModal() {
+      catModal.classList.add("open"); catModal.setAttribute("aria-hidden", "false");
+      document.getElementById("overlay").classList.add("show");
+      document.body.classList.add("lock");
+      setTimeout(() => catModal.querySelector(".x-btn").focus(), 50);
+    }
+    catModal.addEventListener("click", e => {
+      if (e.target === catModal) return closeOverlays();
+      const pick = e.target.closest("[data-cm-cat]");
+      if (pick) {
+        state.cats.clear(); state.q = "";
+        if (pick.dataset.cmCat !== "all") state.cats.add(pick.dataset.cmCat);
+        closeOverlays(); syncChecks(); update(true);
+      }
+      const dept = e.target.closest("[data-dept]");
+      if (dept) toast(`${dept.dataset.dept} is part of the full Asian Home Appliance catalog`);
+    });
+
+    /* Flash deals: biggest discounts */
+    const deals = [...PRODUCTS].filter(p => discountOf(p) > 0).sort((a, b) => discountOf(b) - discountOf(a)).slice(0, 8);
+    document.getElementById("dealsRail").innerHTML = deals.map((p, i) => {
+      const claimed = Math.min(94, 38 + (p.reviews * 7) % 55);
+      return `
+      <article class="deal-card" style="--i:${i}">
+        <a class="deal-media" href="product.html?id=${p.id}" aria-label="${p.name}">
+          <span class="deal-off">-${discountOf(p)}%</span>
+          ${visual(p)}
+        </a>
+        <a class="deal-name" href="product.html?id=${p.id}">${p.name}</a>
+        <div class="price-row"><span class="price">${peso(p.price)}</span><span class="was">${peso(p.was)}</span></div>
+        <div class="deal-bar"><div class="bar"><i data-w="${claimed}"></i></div><span>${claimed >= 80 ? "🔥 Almost gone" : `${claimed}% claimed`}</span></div>
+        <button class="add-btn" data-add="${p.id}">${ICON.cart}<span>Add to Cart</span></button>
+      </article>`;
+    }).join("");
+    const dealsRail = document.getElementById("dealsRail");
+    document.getElementById("dealsNext").onclick = () => dealsRail.scrollBy({ left: dealsRail.clientWidth * .8 });
+    document.getElementById("dealsPrev").onclick = () => dealsRail.scrollBy({ left: -dealsRail.clientWidth * .8 });
+    /* fill the claimed bars when the row scrolls into view */
+    new IntersectionObserver((es, o) => es.forEach(en => {
+      if (!en.isIntersecting) return;
+      dealsRail.querySelectorAll(".deal-bar i").forEach(i => i.style.width = i.dataset.w + "%");
+      o.disconnect();
+    }), { threshold: .3 }).observe(dealsRail);
+
+    /* Brand strip (click a logo to filter by that brand) */
+    const brandList = Object.keys(BRAND_LOGO).filter(b => PRODUCTS.some(p => p.brand === b));
+    const brandHTML = brandList.map(b => `<button class="brand-logo" data-brand="${b}" aria-label="Shop ${b}"><img src="images/brands/${BRAND_LOGO[b]}" alt="${b}" loading="lazy"></button>`).join("");
+    document.getElementById("brandTrack").innerHTML = brandHTML + brandHTML.replace(/<button /g, '<button tabindex="-1" aria-hidden="true" ');
+    document.getElementById("brandTrack").addEventListener("click", e => {
+      const b = e.target.closest("[data-brand]"); if (!b) return;
+      const name = b.dataset.brand;
+      const only = state.brands.size === 1 && state.brands.has(name);
+      state.brands.clear();
+      if (!only) state.brands.add(name);
+      syncChecks(); update(true);
+    });
+
+    /* Filter groups */
+    const countBy = key => PRODUCTS.reduce((m, p) => (m[p[key]] = (m[p[key]] || 0) + 1, m), {});
+    const checkHTML = (group, val, label, n) => `
+      <label class="check"><input type="checkbox" data-group="${group}" value="${val}">
+        <span class="box"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></span>${label}<span class="n">${n}</span></label>`;
+    const cc = countBy("cat"), bc = countBy("brand");
+    document.getElementById("fCat").innerHTML = CATEGORIES.map(c => checkHTML("cats", c, c, cc[c])).join("");
+    document.getElementById("fBrand").innerHTML = Object.keys(bc).sort().map(b => checkHTML("brands", b, b, bc[b])).join("");
+    document.getElementById("fTag").innerHTML = Object.entries(TAG_LABEL).map(([k, l]) => checkHTML("tags", k, l, PRODUCTS.filter(p => p.tags.includes(k)).length)).join("");
+    document.getElementById("fRating").innerHTML = [4.5, 4, 0].map(r =>
+      `<label class="rating-opt"><input type="radio" name="rating" value="${r}" ${r === 0 ? "checked" : ""}>${r ? starsHTML(r) + ` ${r} & up` : "Any rating"}</label>`).join("");
+
+    function syncChecks() {
+      document.querySelectorAll("[data-group]").forEach(i => i.checked = state[i.dataset.group].has(i.value));
+      const active = state.cats.size === 1 ? [...state.cats][0] : state.cats.size ? null : "all";
+      document.querySelectorAll(".cat-tile").forEach(t => t.classList.toggle("active", t.dataset.tile === active));
+      document.querySelectorAll(".cat-nav a").forEach(a => {
+        const c = new URL(a.href).searchParams.get("cat");
+        a.classList.toggle("active", c ? state.cats.size === 1 && state.cats.has(c) : a.textContent.trim() === "All Products" && state.cats.size === 0);
+      });
+      document.querySelectorAll(".brand-logo").forEach(b => b.classList.toggle("on", state.brands.has(b.dataset.brand)));
+      document.getElementById("crumbCat").textContent = state.cats.size === 1 ? [...state.cats][0] : "All Products";
+    }
+
+    document.getElementById("filters").addEventListener("change", e => {
+      const i = e.target;
+      if (i.dataset.group) { i.checked ? state[i.dataset.group].add(i.value) : state[i.dataset.group].delete(i.value); syncChecks(); }
+      if (i.name === "rating") state.minRating = +i.value;
+      if (i.closest(".price-range")) return;
+      update();
+    });
+    /* Dual-thumb price range + typed min/max + presets */
+    const PMAX = 70000, GAP = 1000;
+    const pMin = document.getElementById("priceMin"), pMax = document.getElementById("priceMax");
+    const minBox = document.getElementById("minBox"), maxBox = document.getElementById("maxBox");
+    const fmtNum = n => Math.round(n).toLocaleString("en-PH");
+    const parseNum = s => +String(s).replace(/[^0-9]/g, "") || 0;
+    function setPrice(min, max, fromInput) {
+      min = Math.max(0, Math.min(min, PMAX - GAP));
+      max = Math.min(PMAX, Math.max(max, min + GAP));
+      state.minPrice = min; state.maxPrice = max;
+      pMin.value = min; pMax.value = max;
+      if (fromInput !== minBox) minBox.value = fmtNum(min);
+      if (fromInput !== maxBox) maxBox.value = fmtNum(max);
+      const fill = document.getElementById("drFill");
+      fill.style.left = (min / PMAX * 100) + "%";
+      fill.style.right = (100 - max / PMAX * 100) + "%";
+      document.querySelectorAll("#pricePresets button").forEach(b => b.classList.toggle("on", +b.dataset.min === min && +b.dataset.max === max));
+    }
+    let priceTimer;
+    const priceChanged = () => { clearTimeout(priceTimer); priceTimer = setTimeout(update, 150); };
+    pMin.addEventListener("input", () => {
+      if (+pMin.value > +pMax.value - GAP) pMin.value = +pMax.value - GAP;
+      setPrice(+pMin.value, +pMax.value); priceChanged();
+    });
+    pMax.addEventListener("input", () => {
+      if (+pMax.value < +pMin.value + GAP) pMax.value = +pMin.value + GAP;
+      setPrice(+pMin.value, +pMax.value); priceChanged();
+    });
+    /* bring the thumb you grab to the front so overlapping thumbs stay draggable */
+    [pMin, pMax].forEach(r => r.addEventListener("pointerdown", () => { pMin.style.zIndex = r === pMin ? 3 : 2; pMax.style.zIndex = r === pMax ? 3 : 2; }));
+    [minBox, maxBox].forEach(box => {
+      box.addEventListener("input", () => { box.value = box.value.replace(/[^0-9,]/g, ""); });
+      box.addEventListener("change", () => { setPrice(parseNum(minBox.value), parseNum(maxBox.value) || PMAX); update(); });
+      box.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); box.blur(); } });
+    });
+    document.getElementById("pricePresets").addEventListener("click", e => {
+      const b = e.target.closest("button"); if (!b) return;
+      setPrice(+b.dataset.min, +b.dataset.max); update();
+    });
+    const resetPrice = () => setPrice(0, PMAX);
+    resetPrice();
+    dropdown(document.getElementById("sort"), v => { state.sort = v; update(); });
+    document.getElementById("clearAll").onclick = () => {
+      state.cats.clear(); state.brands.clear(); state.tags.clear();
+      state.minRating = 0; state.q = "";
+      resetPrice();
+      document.querySelector('[name=rating][value="0"]').checked = true;
+      syncChecks(); update();
+    };
+
+    /* View toggle */
+    document.querySelectorAll("[data-view]").forEach(b => b.onclick = () => {
+      document.querySelectorAll("[data-view]").forEach(x => x.classList.toggle("on", x === b));
+      document.getElementById("grid").classList.toggle("list", b.dataset.view === "list");
+      update();
+    });
+
+    /* Mobile drawer */
+    const filters = document.getElementById("filters"), scrim = document.getElementById("scrim");
+    const drawer = open => { filters.classList.toggle("open", open); scrim.classList.toggle("show", open); };
+    document.getElementById("openFilters").onclick = () => drawer(true);
+    scrim.onclick = () => drawer(false);
+
+    /* Active chips */
+    function renderChips() {
+      const chips = [];
+      state.cats.forEach(v => chips.push(["cats", v, v]));
+      state.brands.forEach(v => chips.push(["brands", v, v]));
+      state.tags.forEach(v => chips.push(["tags", v, TAG_LABEL[v]]));
+      if (state.minPrice > 0 || state.maxPrice < PMAX) chips.push(["price", "", state.minPrice > 0 && state.maxPrice < PMAX ? `${peso(state.minPrice)} – ${peso(state.maxPrice)}` : state.minPrice > 0 ? `${peso(state.minPrice)} & up` : `Under ${peso(state.maxPrice)}`]);
+      if (state.minRating) chips.push(["rating", "", state.minRating + "★ & up"]);
+      if (state.q) chips.push(["q", "", `“${state.q}”`]);
+      document.getElementById("chips").innerHTML = chips.map(([g, v, l]) => `<button class="chip" data-chip="${g}" data-v="${v}">${l}<span class="x">×</span></button>`).join("");
+    }
+    document.getElementById("chips").addEventListener("click", e => {
+      const c = e.target.closest("[data-chip]"); if (!c) return;
+      const g = c.dataset.chip;
+      if (g === "price") resetPrice();
+      else if (g === "rating") { state.minRating = 0; document.querySelector('[name=rating][value="0"]').checked = true; }
+      else if (g === "q") state.q = "";
+      else state[g].delete(c.dataset.v);
+      syncChecks(); update();
+    });
+
+    /* Filter + sort + render */
+    let loadTimer;
+    function update(scroll) {
+      state.page = 1;
+      renderChips();
+      const grid = document.getElementById("grid");
+      grid.innerHTML = Array.from({ length: 4 }, () => `<div class="skeleton sk-card"></div>`).join("");
+      clearTimeout(loadTimer);
+      loadTimer = setTimeout(render, 280);
+      if (scroll) document.querySelector(".plp").scrollIntoView({ block: "start" });
+    }
+    function results() {
+      let list = PRODUCTS.filter(p =>
+        (!state.cats.size || state.cats.has(p.cat)) &&
+        (!state.brands.size || state.brands.has(p.brand)) &&
+        (!state.tags.size || p.tags.some(t => state.tags.has(t))) &&
+        p.price >= state.minPrice && p.price <= state.maxPrice &&
+        p.rating >= state.minRating &&
+        (!state.q || (p.name + p.brand + p.cat).toLowerCase().includes(state.q))
+      );
+      const by = { pop: (a, b) => b.reviews - a.reviews, low: (a, b) => a.price - b.price, high: (a, b) => b.price - a.price, disc: (a, b) => discountOf(b) - discountOf(a), rating: (a, b) => b.rating - a.rating };
+      return list.sort(by[state.sort]);
+    }
+    function render() {
+      const list = results();
+      const pages = Math.max(1, Math.ceil(list.length / PER_PAGE));
+      const slice = list.slice((state.page - 1) * PER_PAGE, state.page * PER_PAGE);
+      document.getElementById("count").textContent = list.length;
+      document.getElementById("grid").innerHTML = slice.length
+        ? slice.map(cardHTML).join("")
+        : `<div class="empty"><b>No products match your filters</b>Try removing a filter or widening the price range.</div>`;
+      document.getElementById("pager").innerHTML = pages > 1
+        ? Array.from({ length: pages }, (_, i) => `<button class="${i + 1 === state.page ? "on" : ""}" data-page="${i + 1}">${i + 1}</button>`).join("")
+        : "";
+    }
+    document.getElementById("pager").addEventListener("click", e => {
+      const b = e.target.closest("[data-page]"); if (!b) return;
+      state.page = +b.dataset.page; render();
+      document.querySelector(".plp").scrollIntoView({ block: "start" });
+    });
+
+    syncChecks();
+    update();
+  </script>
+</body>
+</html>
