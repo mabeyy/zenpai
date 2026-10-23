@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete your booking | The Favis Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/jpeg" href="images/brand/favis-logo.jpg">
+  <link rel="stylesheet" href="favis.css">
+</head>
+<body>
+  <div id="top"></div>
+
+  <main class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="cars.html">Fleet</a><span>›</span><a id="crumbCar" href="#"></a><span>›</span><span>Booking</span></nav>
+
+    <div class="bk-layout">
+      <div>
+        <div class="steps" role="tablist" aria-label="Booking steps" id="steps">
+          <button class="step-tab on" data-step="0" role="tab"><span class="n">1</span><span class="lbl">Trip</span></button>
+          <button class="step-tab" data-step="1" role="tab" disabled><span class="n">2</span><span class="lbl">Protection</span></button>
+          <button class="step-tab" data-step="2" role="tab" disabled><span class="n">3</span><span class="lbl">Driver</span></button>
+          <button class="step-tab" data-step="3" role="tab" disabled><span class="n">4</span><span class="lbl">Review & pay</span></button>
+        </div>
+
+        <!-- STEP 1: Trip -->
+        <section class="step-pane on" data-pane="0">
+          <div class="panel">
+            <h2>Your trip</h2>
+            <p class="sub">Check your dates and where you'd like to pick up and return.</p>
+            <div class="trip-review">
+              <img id="tripImg" alt="">
+              <div>
+                <span class="eyebrow" id="tripType"></span>
+                <h3 id="tripName" style="font-size:22px;margin:6px 0 8px"></h3>
+                <div class="cc-specs" id="tripSpecs"></div>
+              </div>
+            </div>
+            <div class="date-pair" id="datePair">
+              <button type="button" class="dpair" id="fStartBtn" aria-haspopup="dialog" aria-expanded="false"><span class="dpi">${cal}</span><span><small>Pickup</small><b id="fStartVal"></b><em id="fStartTime"></em></span></button>
+              <span class="dpair-arrow" id="dpairArrow"></span>
+              <button type="button" class="dpair" id="fEndBtn" aria-haspopup="dialog" aria-expanded="false"><span class="dpi">${cal}</span><span><small>Return</small><b id="fEndVal"></b><em id="fEndTime"></em></span></button>
+            </div>
+            <div id="availNote" style="margin-top:14px"></div>
+          </div>
+          <div class="panel">
+            <h2>Where should we meet you?</h2>
+            <p class="sub">Pick up at our lot for free, meet us at the airport, or we'll bring the car to your door.</p>
+            <div class="loc-cards" id="locOpts" role="radiogroup" aria-label="Pickup location"></div>
+            <div class="loc-detail" id="locDetail"></div>
+            <div class="ret-row">
+              <span>Return the car to</span>
+              <div class="seg ret-seg" id="retSeg" role="radiogroup" aria-label="Return location"></div>
+            </div>
+          </div>
+          <div class="step-actions"><a class="btn btn-ghost" id="backToCar" href="#">← Back to car</a><button class="btn btn-primary" data-next>Continue to protection</button></div>
+        </section>
+
+        <!-- STEP 2: Protection -->
+        <section class="step-pane" data-pane="1">
+          <div class="panel">
+            <h2>How do you want to be covered?</h2>
+            <p class="sub">Every trip needs coverage. Compare what you'd pay if something happens to the car.</p>
+            <div class="plans" id="protOpts" role="radiogroup" aria-label="Protection plan"></div>
+          </div>
+          <div class="panel">
+            <h2>Add-ons <small class="h-note" id="extraNote"></small></h2>
+            <p class="sub">Tap to add. Prices are for your whole trip.</p>
+            <div class="addons" id="extraOpts"></div>
+          </div>
+          <div class="step-actions"><button class="btn btn-ghost" data-prev>← Back</button><button class="btn btn-primary" data-next>Continue to driver details</button></div>
+        </section>
+
+        <!-- STEP 3: Driver -->
+        <section class="step-pane" data-pane="2">
+          <div class="panel">
+            <h2>Primary driver</h2>
+            <p class="sub">Must match the driver's license. The driver needs to be 21 or older.</p>
+            <form class="form-grid" id="driverForm" novalidate>
+              <div class="field"><label for="dFirst">First name</label><input id="dFirst" autocomplete="given-name" required><span class="msg">Required</span></div>
+              <div class="field"><label for="dLast">Last name</label><input id="dLast" autocomplete="family-name" required><span class="msg">Required</span></div>
+              <div class="field"><label for="dEmail">Email</label><input id="dEmail" type="email" autocomplete="email" required><span class="msg">Enter a valid email</span></div>
+              <div class="field"><label for="dPhone">Mobile number</label><input id="dPhone" type="tel" autocomplete="tel" placeholder="(281) 555-0100" required><span class="msg">Enter a 10-digit number</span></div>
+              <div class="field"><label for="dDob_m">Date of birth</label><div class="dparts" data-for="dDob"></div><input id="dDob" type="hidden"><span class="hint" id="dobHint">Drivers must be 21 or older</span><span class="msg">Driver must be 21+</span></div>
+              <div class="field"><label for="dLic">Driver's license number</label><input id="dLic" required><span class="msg">Required</span></div>
+              <div class="field"><label for="dState">License state</label>
+                <select id="dState" aria-label="License state"></select></div>
+              <div class="field"><label for="dExp_m">License expiration</label><div class="dparts" data-for="dExp"></div><input id="dExp" type="hidden"><span class="hint" id="expHint">Printed on the front of your license</span><span class="msg">License must be valid through your trip</span></div>
+            </form>
+          </div>
+          <div class="panel">
+            <h2>Documents</h2>
+            <p class="sub">Upload clear photos. They're encrypted and only used to verify your rental.</p>
+            <div class="upload-grid">
+              <label class="upload" data-upload="license">
+                <input type="file" accept="image/*,.pdf" aria-label="Upload driver's license">
+                <span class="u-empty"><span class="u-ico"></span><b>Driver's license</b><small>Front side · JPG, PNG or PDF</small></span>
+                <span class="u-preview"></span>
+              </label>
+              <label class="upload" data-upload="insurance" id="insUpload">
+                <input type="file" accept="image/*,.pdf" aria-label="Upload insurance card">
+                <span class="u-empty"><span class="u-ico"></span><b>Insurance card</b><small id="insHint">Optional with a Favis plan</small></span>
+                <span class="u-preview"></span>
+              </label>
+            </div>
+          </div>
+          <div class="step-actions"><button class="btn btn-ghost" data-prev>← Back</button><button class="btn btn-primary" data-next>Review & pay</button></div>
+        </section>
+
+        <!-- STEP 4: Review & pay -->
+        <section class="step-pane" data-pane="3">
+          <div class="panel">
+            <h2>Payment</h2>
+            <p class="sub">Nothing is charged until Favis confirms your car.</p>
+            <div class="money-when" id="moneyWhen"></div>
+            <div class="pay-tabs" id="payMethods" role="radiogroup" aria-label="Payment method">
+              <button type="button" class="on" data-pay="card" role="radio" aria-checked="true"><span class="pt-ico" id="ptCard"></span>Card</button>
+              <button type="button" data-pay="paypal" role="radio" aria-checked="false"><span class="pt-ico pt-pp">P</span>PayPal</button>
+              <button type="button" data-pay="apple" role="radio" aria-checked="false"><span class="pt-ico pt-ap"></span>Apple Pay</button>
+            </div>
+            <div id="cardBox" class="card-box">
+              <div class="field"><label for="cNum">Card number</label>
+                <div class="cnum"><input id="cNum" inputmode="numeric" autocomplete="cc-number" placeholder="1234 1234 1234 1234" maxlength="19"><span class="brands" id="brands"><i data-b="visa">VISA</i><i data-b="mc"><b></b><b></b></i><i data-b="amex">AMEX</i></span></div>
+              </div>
+              <div class="card-row">
+                <div class="field"><label for="cExp">Expiry</label><input id="cExp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7"></div>
+                <div class="field"><label for="cCvc">Security code <span class="tip" tabindex="0" aria-label="3 digits on the back, 4 on the front for Amex">?<em>3 digits on the back of your card (4 on the front for Amex)</em></span></label><input id="cCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="CVC" maxlength="4"></div>
+                <div class="field"><label for="cZip">Billing ZIP</label><input id="cZip" inputmode="numeric" autocomplete="postal-code" placeholder="77032" maxlength="5"></div>
+              </div>
+              <div class="field"><label for="cName">Name on card</label><input id="cName" autocomplete="cc-name" placeholder="As printed on the card"></div>
+            </div>
+            <div id="altPay" class="alt-pay" style="display:none"></div>
+          </div>
+          <div class="panel">
+            <h2>Rental agreement</h2>
+            <p class="sub">The key terms, in plain English. Read them, then sign.</p>
+            <ul class="terms" id="terms"></ul>
+            <div class="sig-head">
+              <span>Your signature</span>
+              <div class="seg sig-mode" id="sigMode"><button type="button" class="on" data-m="draw">Draw</button><button type="button" data-m="type">Type</button></div>
+            </div>
+            <div class="sig-wrap" id="sigWrap">
+              <canvas id="sig" aria-label="Signature pad"></canvas>
+              <input id="sigType" class="sig-type" placeholder="Type your full name" aria-label="Type your full name" style="display:none">
+              <span class="sig-line"></span>
+              <span class="sig-hint" id="sigHint">Sign here with your mouse or finger</span>
+              <span class="sig-date" id="sigDate"></span>
+              <button type="button" class="sig-clear" id="sigClear">Clear</button>
+            </div>
+            <label class="agree"><input type="checkbox" id="agree"><span>I agree to the full <a href="#">Rental Agreement</a> and <a href="#">Cancellation Policy</a>, and confirm the driver details are accurate.</span></label>
+          </div>
+          <div class="step-actions">
+            <button class="btn btn-ghost" data-prev>← Back</button>
+            <button class="btn btn-primary" id="payBtn" disabled>Confirm & reserve</button>
+          </div>
+          <p class="secure" style="justify-content:flex-end;margin-top:10px"><span id="lockIco"></span>Secure checkout · 256-bit encryption · Powered by Stripe</p>
+        </section>
+
+        <!-- DONE -->
+        <section class="step-pane" data-pane="4">
+          <div class="panel confirm">
+            <div class="confirm-ico"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+            <h2>Reservation request received</h2>
+            <span class="ref"><small>REF</small><span id="refNo"></span></span>
+            <p style="color:var(--ink-2);max-width:520px;margin:6px auto 0;line-height:1.55" id="confirmText"></p>
+            <div class="next-steps">
+              <div><i>1</i><b>ID verification</b><p>We'll text you a secure link to verify your identity (about 2 minutes).</p></div>
+              <div><i>2</i><b>Favis confirms</b><p>Our team checks your documents and confirms the car, usually within 2 hours.</p></div>
+              <div><i>3</i><b>Pick up & go</b><p id="pickupStep"></p></div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px">
+              <a class="btn btn-dark" href="cars.html">Back to fleet</a>
+              <button class="btn btn-ghost" onclick="toast('Added to your calendar')">Add to calendar</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Summary -->
+      <aside class="summary" aria-label="Order summary">
+        <div class="sum-head">
+          <img id="sumImg" alt="">
+          <div><small>Your car</small><b id="sumName"></b><span id="sumSub"></span></div>
+          <a class="sum-edit" id="sumCarLink" href="#">Change</a>
+        </div>
+        <div class="sum-body">
+          <div class="sum-trip" id="sumTrip"></div>
+          <div class="sum-lines" id="sumLines"></div>
+          <div class="sum-total"><div><span>Total</span><small id="sumDays"></small></div><b id="sumTotal"></b></div>
+          <div class="sum-due"><span>Due today</span><b>$0.00</b></div>
+          <div class="sum-notes">
+            <div>${shield}<span><b>$250 refundable deposit</b> held at pickup, released after return</span></div>
+            <div id="cancelNote"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div id="bottom"></div>
+
+  <script src="fleet.js"></script>
+  <script>
+    renderChrome("fleet");
+    const $ = id => document.getElementById(id);
+    const car = CARS.find(c => c.id === +new URLSearchParams(location.search).get("id")) || CARS[0];
+    let trip = loadTrip();
+    if (trip.loc === "iah" && !car.airport) trip.loc = "hq";
+    if (trip.ret === "iah" && !car.airport) trip.ret = trip.loc;
+    let step = 0, maxStep = 0;
+    const order = { prot: "standard", extras: new Set(), pay: "card", docs: {} };
+    const CARD_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>';
+    const UPLOAD_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>';
+
+    /* static icons */
+    document.querySelectorAll("[data-next]")[0].innerHTML = `Continue to protection ${I.arrow}`;
+    $("ptCard").innerHTML = CARD_ICON;
+    $("terms").innerHTML = [
+      ["Mileage", "200 miles a day included, then $0.35 per mile."],
+      ["Fuel", "Return it with the same fuel level, or add prepaid fuel."],
+      ["Late return", "30-minute grace period, then billed by the hour."],
+      ["Cancellation", "Free until 24 hours before pickup."],
+      ["Smoking & pets", "No smoking. Pets only with the pet add-on."],
+    ].map(([k, v]) => `<li><b>${k}</b><span>${v}</span></li>`).join("");
+    $("sigDate").textContent = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    document.querySelectorAll(".u-ico").forEach(el => el.innerHTML = UPLOAD_ICON);
+    $("lockIco").innerHTML = I.shield;
+
+    /* ---------- Car + trip ---------- */
+    $("crumbCar").textContent = car.name; $("crumbCar").href = `car.html?id=${car.id}&${tripQuery(trip)}`;
+    $("backToCar").href = $("crumbCar").href;
+    $("tripImg").src = $("sumImg").src = car.photos[0]; $("tripImg").alt = $("sumImg").alt = car.name;
+    $("tripType").innerHTML = `<i></i>${car.type} · ${car.color}`;
+    $("tripName").textContent = $("sumName").textContent = car.name;
+    $("sumSub").textContent = `${car.color} · ${car.seats} seats · ${car.fuel}`;
+    $("sumCarLink").href = `car.html?id=${car.id}&${tripQuery(trip)}`;
+    document.querySelector(".sum-notes > div").innerHTML = document.querySelector(".sum-notes > div").innerHTML.replace("${shield}", I.shield);
+    $("tripSpecs").innerHTML = `<span>${I.seat}${car.seats} seats</span><span>${I.gear}Automatic</span><span>${I.fuel}${car.mpg[0]}/${car.mpg[1]} mpg</span><span>${I.bag}${car.cargo}</span>`;
+
+    document.querySelectorAll(".dpi").forEach(x => x.innerHTML = I.cal); $("dpairArrow").innerHTML = I.arrow;
+    const showDates = () => {
+      const d = s => fmtDate(s, { weekday: "short", month: "short", day: "numeric" });
+      $("fStartVal").textContent = d(trip.start); $("fEndVal").textContent = d(trip.end);
+      $("fStartTime").textContent = fmtTime(trip.stime); $("fEndTime").textContent = fmtTime(trip.etime);
+    };
+    /* shared picker (fleet.js), with this car's booked days blocked */
+    rangePicker({
+      host: $("datePair"), triggers: { start: $("fStartBtn"), end: $("fEndBtn") }, blocked: bookedDays(car),
+      get: () => trip, set: t => { trip = t; }, onChange: showDates, onApply: () => update(),
+    });
+
+    /* ---------- Pickup + return location ---------- */
+    const TRUCK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11" rx="1"/><path d="M15 9h4l3 4v4h-7"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>';
+    const LOC_META = {
+      hq: { ico: I.pin, short: "Houston HQ", line: "Ready in 15 min · keys at the desk" },
+      iah: { ico: I.plane, short: "IAH Airport", line: "We meet you at the curb" },
+      delivery: { ico: TRUCK_ICON, short: "We collect it from you", line: "Dropped off where you are" },
+    };
+    const canUse = l => l.id !== "iah" || car.airport;
+    let deliveryAddr = "", flightNo = "";
+    function renderLocs() {
+      $("locOpts").innerHTML = LOCATIONS.map(l => {
+        const m = LOC_META[l.id], ok = canUse(l), on = trip.loc === l.id;
+        return `<button type="button" role="radio" aria-checked="${on}" class="lcard ${on ? "on" : ""}" data-loc="${l.id}" ${ok ? "" : "disabled"}>
+          <span class="lcard-top"><span class="lcard-ico">${m.ico}</span><span class="lcard-fee ${l.fee ? "" : "free"}">${ok ? (l.fee ? "+" + usd(l.fee) : "Free") : "N/A"}</span></span>
+          <b>${l.name}</b><small>${ok ? m.line : "Not offered for this vehicle"}</small>
+        </button>`;
+      }).join("");
+      const l = LOCATIONS.find(x => x.id === trip.loc);
+      $("locDetail").innerHTML = l.id === "hq"
+        ? `<div class="ld-row">${I.pin}<div><b>2315 Greens Rd, Houston, TX 77032</b><small>Open daily 7 AM – 9 PM · free parking for your own car</small></div><a class="ld-link" href="https://maps.google.com/?q=2315+Greens+Rd+Houston+TX+77032" target="_blank" rel="noopener">Directions →</a></div>`
+        : l.id === "iah"
+        ? `<div class="ld-row">${I.plane}<div><b>George Bush Intercontinental (IAH)</b><small>Text us when you land. We track your flight if it's delayed.</small></div></div>
+           <div class="field" style="margin-top:12px"><label for="flightNo">Flight number <span style="color:var(--ink-3);font-weight:500">(optional)</span></label><input id="flightNo" placeholder="e.g. UA 1532" value="${flightNo}"></div>`
+        : `<div class="ld-row">${TRUCK_ICON}<div><b>Delivered to your door</b><small>Anywhere within 25 miles of our Houston HQ. A driver hands you the keys.</small></div></div>
+           <div class="field" style="margin-top:12px"><label for="delAddr">Delivery address</label><input id="delAddr" placeholder="Street, city, ZIP" value="${deliveryAddr}" autocomplete="street-address"></div>`;
+      $("locDetail").querySelector("#flightNo")?.addEventListener("input", e => flightNo = e.target.value);
+      $("locDetail").querySelector("#delAddr")?.addEventListener("input", e => deliveryAddr = e.target.value);
+      const opts = [["same", "Same place"], ...LOCATIONS.filter(canUse).filter(x => x.id !== trip.loc).map(x => [x.id, LOC_META[x.id].short + (x.fee ? ` +${usd(x.fee)}` : "")])];
+      const cur = trip.ret === trip.loc ? "same" : trip.ret;
+      $("retSeg").innerHTML = opts.map(([v, t]) => `<button type="button" role="radio" aria-checked="${cur === v}" class="${cur === v ? "on" : ""}" data-ret="${v}">${t}</button>`).join("");
+    }
+    $("locOpts").addEventListener("click", e => {
+      const b = e.target.closest("[data-loc]"); if (!b || b.disabled) return;
+      const sameBefore = trip.ret === trip.loc;
+      trip.loc = b.dataset.loc; if (sameBefore) trip.ret = trip.loc;
+      renderLocs(); update();
+    });
+    $("retSeg").addEventListener("click", e => {
+      const b = e.target.closest("[data-ret]"); if (!b) return;
+      trip.ret = b.dataset.ret === "same" ? trip.loc : b.dataset.ret; renderLocs(); update();
+    });
+
+    /* ---------- Protection + extras ---------- */
+    const PROT = [
+      { id: "own", name: "My own insurance", short: "Bring your policy", desc: "Upload proof of a policy that covers rental cars. Favis staff verifies it before pickup.", day: 0, risk: "Your policy's deductible", cov: [1, 0, 0, 0] },
+      { id: "standard", name: "Standard", short: "Balanced cover", desc: "Covers damage to the car with a $1,000 deductible. Includes 24/7 roadside assistance.", day: 19, tag: "Most popular", risk: "Up to $1,000", cov: [1, 1, 0, 0] },
+      { id: "premium", name: "Premium", short: "Worry-free", desc: "Damage covered with a $0 deductible, plus tire, glass and lost-key coverage.", day: 29, risk: "$0", cov: [1, 1, 1, 1] },
+    ];
+    const EXTRAS = [
+      { id: "driver", name: "Second driver", desc: "Share the driving (21+)", day: 10, ico: I.user },
+      { id: "seat", name: "Child seat", desc: "Booster or forward-facing, installed", day: 8, cap: 60, ico: I.seat },
+      { id: "toll", name: "EZ TAG toll pass", desc: "Skip toll booths · tolls at cost", day: 5, ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h4M7 14h7"/></svg>' },
+      { id: "fuel", name: "Prepaid fuel", desc: "Return it at any fuel level", flat: 45, ico: I.fuel },
+      { id: "pet", name: "Bring a pet", desc: "Includes after-trip deep clean", flat: 35, ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg>' },
+    ];
+    const extraCost = (x, days) => x.flat || Math.min(x.day * days, x.cap || Infinity);
+    const COVER = ["Damage to the car", "24/7 roadside help", "Tires & windshield", "Lost keys & lockout"];
+    function renderProt() {
+      const days = tripDays(trip);
+      const YES = `<i class="y">${I.check}</i>`, NO = '<i class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 12h12"/></svg></i>';
+      $("protOpts").innerHTML = PROT.map(p => {
+        const on = order.prot === p.id;
+        return `<button type="button" role="radio" aria-checked="${on}" class="plan ${on ? "on" : ""} ${p.tag ? "pop" : ""}" data-prot="${p.id}">
+          ${p.tag ? `<span class="plan-tag">${p.tag}</span>` : ""}
+          <span class="plan-head"><b>${p.name}</b><small>${p.short}</small></span>
+          <span class="plan-price">${p.day ? `${usd(p.day * days)}<em>${usd(p.day)}/day × ${days}</em>` : `Free<em>Upload proof in step 3</em>`}</span>
+          <span class="plan-risk"><small>If the car is damaged, you pay</small><b>${p.risk}</b></span>
+          <span class="plan-cov">${COVER.map((c, i) => `<span class="${p.cov[i] ? "" : "off"}">${p.cov[i] ? YES : NO}${c}</span>`).join("")}</span>
+          <span class="plan-pick">${on ? `${I.check} Selected` : "Choose"}</span>
+        </button>`;
+      }).join("");
+      const add = EXTRAS.filter(x => order.extras.has(x.id)).reduce((s, x) => s + extraCost(x, days), 0);
+      $("extraNote").textContent = order.extras.size ? `${order.extras.size} added · ${usd(add)}` : "";
+      $("extraOpts").innerHTML = EXTRAS.map(x => {
+        const on = order.extras.has(x.id);
+        return `<button type="button" class="addon ${on ? "on" : ""}" data-extra="${x.id}" aria-pressed="${on}">
+          <span class="ad-ico">${x.ico}</span>
+          <span class="ad-text"><b>${x.name}</b><small>${x.desc}</small></span>
+          <span class="ad-price">${usd(extraCost(x, days))}<small>${x.flat ? "one-time" : `${usd(x.day)}/day${x.cap && x.day * days > x.cap ? " · capped" : ""}`}</small></span>
+          <span class="ad-toggle">${on ? I.check : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'}</span>
+        </button>`;
+      }).join("");
+    }
+    $("protOpts").addEventListener("click", e => { const b = e.target.closest("[data-prot]"); if (b) { order.prot = b.dataset.prot; update(); } });
+    $("extraOpts").addEventListener("click", e => {
+      const b = e.target.closest("[data-extra]"); if (!b) return;
+      const id = b.dataset.extra; order.extras.has(id) ? order.extras.delete(id) : order.extras.add(id); update();
+    });
+
+    /* ---------- Totals ---------- */
+    function totals() {
+      const days = tripDays(trip), rate = dayRate(car, days);
+      const lines = [[`${usd(car.rate)} × ${days} day${days > 1 ? "s" : ""}`, car.rate * days]];
+      const disc = (car.rate - rate) * days;
+      if (disc > 0) lines.push([`${TERMS[termFor(days)].label} discount`, -disc, "disc"]);
+      const pick = LOCATIONS.find(l => l.id === trip.loc), ret = LOCATIONS.find(l => l.id === trip.ret);
+      if (pick.fee) lines.push([`${pick.name} pickup`, pick.fee]);
+      if (ret.fee && trip.ret !== trip.loc) lines.push([`${ret.name} return`, ret.fee]);
+      const prot = PROT.find(p => p.id === order.prot);
+      lines.push([prot.id === "own" ? "Own insurance" : `${prot.name} protection`, prot.day * days]);
+      EXTRAS.filter(x => order.extras.has(x.id)).forEach(x => lines.push([x.name, extraCost(x, days)]));
+      const sub = lines.reduce((s, l) => s + l[1], 0);
+      const taxRate = days > 30 ? .0625 : .10;   // Texas motor vehicle rental tax: 10% for 30 days or less, 6.25% longer
+      lines.push([`Texas rental tax (${taxRate * 100}%)`, Math.round(sub * taxRate * 100) / 100]);
+      return { lines, total: lines.reduce((s, l) => s + l[1], 0), days };
+    }
+
+    function update() {
+      saveTrip(trip);
+      const { lines, total, days } = totals();
+      showDates();
+      const pick = LOCATIONS.find(l => l.id === trip.loc), ret = LOCATIONS.find(l => l.id === trip.ret);
+      const dd = s => fmtDate(s, { weekday: "short", month: "short", day: "numeric" });
+      $("sumTrip").innerHTML = `
+        <div class="st-row"><i class="st-dot"></i><div><small>Pickup</small><b>${dd(trip.start)} · ${fmtTime(trip.stime)}</b><span>${pick.name}</span></div></div>
+        <div class="st-len">${days} day${days > 1 ? "s" : ""}</div>
+        <div class="st-row"><i class="st-dot end"></i><div><small>Return</small><b>${dd(trip.end)} · ${fmtTime(trip.etime)}</b><span>${ret.name}</span></div></div>
+        ${step < 4 ? '<button type="button" class="sum-edit st-edit" data-goto="0">Edit</button>' : ""}`;
+      const money = v => v < 0 ? "−" + usd(-v, true) : v === 0 ? "Free" : usd(v, true);
+      const extraIds = Object.fromEntries(EXTRAS.map(x => [x.name, x.id]));
+      const groups = [["Rental", []], ["Protection & add-ons", []], ["Taxes", []]];
+      lines.forEach(l => { const k = l[0]; (/tax/i.test(k) ? groups[2] : /protection|insurance/i.test(k) || extraIds[k] ? groups[1] : groups[0])[1].push(l); });
+      $("sumLines").innerHTML = groups.filter(([, ls]) => ls.length).map(([g, ls]) => `<div class="sl-group"><h5>${g}</h5>${ls.map(([k, v, cls]) =>
+        `<div class="${cls || ""}"><span>${k}${extraIds[k] && step < 4 ? `<button type="button" class="sl-x" data-unextra="${extraIds[k]}" aria-label="Remove ${k}">×</button>` : ""}</span><span>${money(v)}</span></div>`).join("")}</div>`).join("");
+      $("sumDays").textContent = `${days} day${days > 1 ? "s" : ""} · taxes included`;
+      $("sumTotal").textContent = usd(total, true);
+      $("sumTotal").animate([{ opacity: .3, transform: "translateY(-3px)" }, { opacity: 1, transform: "none" }], { duration: 300, easing: "ease-out" });
+      const cancelBy = parseISO(trip.start); cancelBy.setDate(cancelBy.getDate() - 1);
+      $("cancelNote").innerHTML = `${I.check}<span><b>Free cancellation</b> until ${cancelBy.toLocaleDateString("en-US", { month: "short", day: "numeric" })}, ${fmtTime(trip.stime)}</span>`;
+      const avail = isAvailable(car, trip);
+      $("availNote").innerHTML = avail
+        ? `<div class="bk-alert ok">${I.check}${car.name} is available for ${days} day${days > 1 ? "s" : ""}${termFor(days) !== "daily" ? ` · ${TERMS[termFor(days)].label.toLowerCase()} rate applied` : ""}</div>`
+        : `<div class="bk-alert no">${I.cal}This car is booked on some of these days. Choose other dates.</div>`;
+      document.querySelector('[data-pane="0"] [data-next]').disabled = !avail;
+      $("insHint").textContent = order.prot === "own" ? "Required for your own insurance" : "Optional with a Favis plan";
+      renderProt();
+      checkPay();
+    }
+
+    /* ---------- Steps ---------- */
+    function go(n) {
+      step = n; maxStep = Math.max(maxStep, n);
+      if (n === 3) {
+        if (!$("cName").value) $("cName").value = `${$("dFirst").value} ${$("dLast").value}`.trim();
+        $("moneyWhen").innerHTML = `
+          <div><small>Today</small><b>$0.00</b><span>Card is only verified</span></div>
+          <div><small>When Favis confirms</small><b>${$("sumTotal").textContent}</b><span>Usually within 2 hours</span></div>
+          <div><small>At pickup</small><b>$250 hold</b><span>Released after return</span></div>`;
+      }
+      document.querySelectorAll(".step-pane").forEach(p => p.classList.toggle("on", +p.dataset.pane === n));
+      document.querySelectorAll(".step-tab").forEach(t => {
+        const i = +t.dataset.step;
+        t.classList.toggle("on", i === n); t.classList.toggle("done", i < n || n === 4);
+        t.disabled = i > maxStep || n === 4;
+        t.querySelector(".n").innerHTML = (i < n || n === 4) ? I.check : i + 1;
+      });
+      scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function validDriver() {
+      let ok = true;
+      const set = (id, bad) => { $(id).closest(".field").classList.toggle("err", bad); if (bad) ok = false; };
+      ["dFirst", "dLast", "dLic"].forEach(id => set(id, !$(id).value.trim()));
+      set("dEmail", !/^\S+@\S+\.\S+$/.test($("dEmail").value));
+      set("dPhone", $("dPhone").value.replace(/\D/g, "").length !== 10);
+      const dob = $("dDob").value ? parseISO($("dDob").value) : null, age21 = new Date(); age21.setFullYear(age21.getFullYear() - 21);
+      set("dDob", !dob || dob > age21);
+      set("dExp", !$("dExp").value || parseISO($("dExp").value) < parseISO(trip.end));
+      if (!order.docs.license) { ok = false; toast("Please upload your driver's license"); }
+      else if (order.prot === "own" && !order.docs.insurance) { ok = false; toast("Upload your insurance card to use your own coverage"); }
+      if (!ok) document.querySelector(".field.err input")?.focus();
+      return ok;
+    }
+    document.addEventListener("click", e => {
+      if (e.target.closest("[data-next]")) {
+        if (step === 2 && !validDriver()) return;
+        go(step + 1);
+      }
+      if (e.target.closest("[data-prev]")) go(step - 1);
+      const tab = e.target.closest(".step-tab");
+      if (tab && !tab.disabled) go(+tab.dataset.step);
+    });
+    document.querySelector(".summary").addEventListener("click", e => {
+      const x = e.target.closest("[data-unextra]"); if (x) { order.extras.delete(x.dataset.unextra); update(); return; }
+      const g = e.target.closest("[data-goto]"); if (g) go(+g.dataset.goto);
+    });
+    $("driverForm").addEventListener("input", e => e.target.closest(".field")?.classList.remove("err"));
+    $("dPhone").addEventListener("input", e => {
+      const d = e.target.value.replace(/\D/g, "").slice(0, 10);
+      e.target.value = d.length > 6 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : d.length > 3 ? `(${d.slice(0, 3)}) ${d.slice(3)}` : d;
+    });
+
+    /* ---------- Uploads with preview ---------- */
+    /* Month / Day / Year entry (faster than a calendar for birthdays and expiry dates) */
+    const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    document.querySelectorAll(".dparts").forEach(w => {
+      const id = w.dataset.for;
+      w.innerHTML = `<select id="${id}_m" aria-label="Month"><option value="">Month</option>${MONTHS.map((m, i) => `<option value="${i + 1}">${m}</option>`).join("")}</select>
+        <input id="${id}_d" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day">
+        <input id="${id}_y" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year">`;
+      const [m, d, y] = ["m", "d", "y"].map(k => $(`${id}_${k}`));
+      const sync = () => {
+        d.value = d.value.replace(/\D/g, ""); y.value = y.value.replace(/\D/g, "");
+        const mm = +m.value, dd = +d.value, yy = +y.value;
+        const ok = mm && dd >= 1 && dd <= new Date(yy || 2000, mm, 0).getDate() && yy > 1900 && yy < 2100;
+        $(id).value = ok ? `${yy}-${String(mm).padStart(2, "0")}-${String(dd).padStart(2, "0")}` : "";
+        w.closest(".field").classList.remove("err");
+        dateHint(id);
+      };
+      [m, d, y].forEach(x => x.addEventListener("input", sync));
+      m.addEventListener("change", sync);
+      customSelect(m, { columns: 3, placeholder: "Month" });
+      d.addEventListener("input", () => { if (d.value.length === 2) y.focus(); });
+      m.addEventListener("change", () => setTimeout(() => d.focus(), 0));
+    });
+    function dateHint(id) {
+      const v = $(id).value;
+      if (id === "dDob") {
+        if (!v) return $("dobHint").innerHTML = "Drivers must be 21 or older";
+        const b = parseISO(v), t = new Date(); let age = t.getFullYear() - b.getFullYear(); if (t < new Date(t.getFullYear(), b.getMonth(), b.getDate())) age--;
+        $("dobHint").innerHTML = age >= 21 && age < 100 ? `<span class="ok">✓ Age ${age}, eligible to drive</span>` : `<span class="bad">Age ${age} · drivers must be 21+</span>`;
+      } else {
+        if (!v) return $("expHint").innerHTML = "Printed on the front of your license";
+        $("expHint").innerHTML = parseISO(v) >= parseISO(trip.end) ? `<span class="ok">✓ Valid through your return on ${fmtDate(trip.end)}</span>` : `<span class="bad">Expires before your return on ${fmtDate(trip.end)}</span>`;
+      }
+    }
+
+    const STATES = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming","District of Columbia","International license"];
+    $("dState").innerHTML = STATES.map(s => `<option ${s === "Texas" ? "selected" : ""}>${s}</option>`).join("");
+    customSelect($("dState"), { search: true });
+
+    /* long camera/UUID filenames: keep the start and the extension */
+    const shortName = n => { const dot = n.lastIndexOf("."), base = dot > 0 ? n.slice(0, dot) : n, ext = dot > 0 ? n.slice(dot) : ""; return base.length > 18 ? base.slice(0, 14) + "…" + ext : n; };
+    document.querySelectorAll("[data-upload]").forEach(box => {
+      const input = box.querySelector("input");
+      const show = file => {
+        if (!file) return;
+        order.docs[box.dataset.upload] = file.name;
+        const isImg = file.type.startsWith("image/");
+        box.querySelector(".u-preview").innerHTML = `${isImg ? `<img src="${URL.createObjectURL(file)}" alt="">` : `<span class="u-file">PDF</span>`}
+          <div><small>${box.dataset.upload === "license" ? "Driver's license" : "Insurance card"}</small><b title="${file.name}">${shortName(file.name)}</b><em>${file.size > 1048576 ? (file.size / 1048576).toFixed(1) + " MB" : Math.round(file.size / 1024) + " KB"} · Uploaded ✓</em></div><span class="chip chip-teal">Replace</span>`;
+        box.classList.add("done");
+      };
+      input.addEventListener("change", () => show(input.files[0]));
+      ["dragenter", "dragover"].forEach(ev => box.addEventListener(ev, e => { e.preventDefault(); box.classList.add("drag"); }));
+      ["dragleave", "drop"].forEach(ev => box.addEventListener(ev, e => { e.preventDefault(); box.classList.remove("drag"); }));
+      box.addEventListener("drop", e => show(e.dataTransfer.files[0]));
+    });
+
+    /* ---------- Payment ---------- */
+    $("payMethods").addEventListener("click", e => {
+      const b = e.target.closest("[data-pay]"); if (!b) return;
+      order.pay = b.dataset.pay;
+      $("payMethods").querySelectorAll("button").forEach(x => { x.classList.toggle("on", x === b); x.setAttribute("aria-checked", x === b); });
+      $("cardBox").style.display = order.pay === "card" ? "" : "none";
+      $("altPay").style.display = order.pay === "card" ? "none" : "flex";
+      $("altPay").innerHTML = order.pay === "paypal"
+        ? `<span class="pt-ico pt-pp">P</span><div><b>Pay with PayPal</b><small>After you confirm, a PayPal window opens to approve the payment.</small></div>`
+        : `<span class="pt-ico pt-ap"></span><div><b>Pay with Apple Pay</b><small>Confirm with Face ID or Touch ID after you press Confirm & reserve.</small></div>`;
+      checkPay();
+    });
+    $("cNum").addEventListener("input", e => {
+      const d = e.target.value.replace(/\D/g, "");
+      const brand = /^4/.test(d) ? "visa" : /^(5[1-5]|2[2-7])/.test(d) ? "mc" : /^3[47]/.test(d) ? "amex" : "";
+      e.target.value = brand === "amex" ? d.slice(0, 15).replace(/^(\d{4})(\d{0,6})(\d{0,5}).*/, (m, a, b, c) => [a, b, c].filter(Boolean).join(" ")) : d.slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
+      $("brands").dataset.brand = brand;
+      checkPay();
+    });
+    $("cZip").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 5); checkPay(); });
+    $("cExp").addEventListener("input", e => { const d = e.target.value.replace(/\D/g, "").slice(0, 4); e.target.value = d.length > 2 ? `${d.slice(0, 2)} / ${d.slice(2)}` : d; checkPay(); });
+    $("cCvc").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4); checkPay(); });
+    $("cName").addEventListener("input", checkPay);
+    $("agree").addEventListener("change", checkPay);
+    let signed = false;
+    function checkPay() {
+      const cardOk = order.pay !== "card" || ($("cName").value.trim() && $("cNum").value.replace(/\D/g, "").length >= 15 && /^\d{2} \/ \d{2}$/.test($("cExp").value) && $("cCvc").value.length >= 3 && $("cZip").value.length === 5);
+      const ready = cardOk && signed && $("agree").checked;
+      $("payBtn").disabled = !ready;
+      $("payBtn").innerHTML = ready ? `Confirm & reserve · ${$("sumTotal").textContent}` : "Confirm & reserve";
+    }
+
+    /* Draw or type signature */
+    $("sigMode").addEventListener("click", e => {
+      const b = e.target.closest("[data-m]"); if (!b) return;
+      $("sigMode").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+      const typed = b.dataset.m === "type";
+      canvas.style.display = typed ? "none" : ""; $("sigType").style.display = typed ? "" : "none";
+      $("sigHint").textContent = typed ? "Your typed name counts as your signature" : "Sign here with your mouse or finger";
+      $("sigClear").click();
+      if (typed) { $("sigType").value = `${$("dFirst").value} ${$("dLast").value}`.trim(); $("sigType").dispatchEvent(new Event("input")); $("sigType").focus(); }
+    });
+    $("sigType").addEventListener("input", e => { signed = e.target.value.trim().length > 2; $("sigWrap").classList.toggle("signed", signed); checkPay(); });
+
+    /* ---------- Signature pad ---------- */
+    const canvas = $("sig"), ctx = canvas.getContext("2d");
+    function sizeCanvas() {
+      const r = canvas.getBoundingClientRect(), dpr = devicePixelRatio || 1;
+      canvas.width = r.width * dpr; canvas.height = r.height * dpr; ctx.scale(dpr, dpr);
+      ctx.lineWidth = 2.4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#0a1823";
+    }
+    let drawing = false, last;
+    const pt = e => { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+    canvas.addEventListener("pointerdown", e => { if (!canvas.width) sizeCanvas(); drawing = true; last = pt(e); canvas.setPointerCapture(e.pointerId); });
+    canvas.addEventListener("pointermove", e => {
+      if (!drawing) return;
+      const p = pt(e);
+      ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.quadraticCurveTo(last.x, last.y, p.x, p.y); ctx.stroke();
+      last = p;
+      if (!signed) { signed = true; $("sigWrap").classList.add("signed"); checkPay(); }
+    });
+    ["pointerup", "pointercancel"].forEach(ev => canvas.addEventListener(ev, () => drawing = false));
+    $("sigClear").onclick = () => { $("sigType").value = ""; ctx.clearRect(0, 0, canvas.width, canvas.height); signed = false; $("sigWrap").classList.remove("signed"); checkPay(); };
+    new ResizeObserver(() => { if (canvas.getBoundingClientRect().width) { const had = signed; sizeCanvas(); if (had) $("sigClear").click(); } }).observe(canvas);
+
+    $("payBtn").onclick = () => {
+      $("payBtn").disabled = true; $("payBtn").textContent = "Processing…";
+      setTimeout(() => {
+        const ref = "FV-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+        $("refNo").textContent = ref;
+        const pick = LOCATIONS.find(l => l.id === trip.loc);
+        $("confirmText").innerHTML = `Thanks, ${$("dFirst").value.trim() || "there"}! Your request for the <b>${car.name}</b>, ${fmtDate(trip.start)} – ${fmtDate(trip.end)}, is in. We've emailed a copy to ${$("dEmail").value || "you"}. You won't be charged until Favis confirms.`;
+        $("pickupStep").textContent = `${pick.name}: ${pick.detail}. ${fmtDate(trip.start, { weekday: "long", month: "short", day: "numeric" })} at ${fmtTime(trip.stime)}.`;
+        go(4);
+      }, 1100);
+    };
+
+    renderLocs(); update(); go(0);
+  </script>
+</body>
+</html>
