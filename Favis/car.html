@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Details | The Favis Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/jpeg" href="images/brand/favis-logo.jpg">
+  <link rel="stylesheet" href="favis.css">
+</head>
+<body>
+  <div id="top"></div>
+
+  <main class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="cars.html">Fleet</a><span>›</span><a id="crumbType" href="cars.html"></a><span>›</span><span id="crumbName"></span></nav>
+
+    <div class="gallery-actions">
+      <div class="gallery" id="gallery"></div>
+      <button class="btn btn-ghost btn-sm all" id="allPhotos"></button>
+    </div>
+
+    <div class="detail-layout">
+      <div>
+        <div class="title-row">
+          <div>
+            <span class="eyebrow" id="eyebrow"></span>
+            <h1 id="title" style="margin-top:8px"></h1>
+            <div class="title-meta" id="meta"></div>
+          </div>
+          <div class="share-row">
+            <button class="icon-btn" id="saveBtn" aria-label="Save vehicle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+            <button class="icon-btn" id="shareBtn" aria-label="Share vehicle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+          </div>
+        </div>
+
+        <section class="section reveal">
+          <h2>What you're driving <small id="specSub"></small></h2>
+          <div class="gauges" id="gauges"></div>
+          <dl class="sheet" id="sheet"></dl>
+        </section>
+
+        <section class="section reveal">
+          <h2>Features <small id="featCount"></small></h2>
+          <div class="feat-groups" id="feats"></div>
+        </section>
+
+        <section class="section reveal">
+          <h2>Rental pricing <small>Longer trips get a lower daily rate automatically</small></h2>
+          <div class="price-tiers" id="tiers"></div>
+        </section>
+
+        <section class="section reveal" id="availability">
+          <h2>Availability <small>Tap a start date, then an end date</small></h2>
+          <div class="cal-wrap" id="calWrap"></div>
+          <div class="cal-legend">
+            <span><i style="background:var(--teal)"></i>Your trip</span>
+            <span><i style="background:repeating-linear-gradient(135deg,#e4e8ec 0 3px,#fff 3px 6px)"></i>Booked</span>
+            <span><i style="background:var(--gold);width:8px;height:8px;border-radius:50%"></i>Today</span>
+          </div>
+        </section>
+
+        <section class="section reveal">
+          <h2>Pickup & return</h2>
+          <div class="loc-card">
+            <div class="loc-map" aria-hidden="true">
+              <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice">
+                <rect width="400" height="240" fill="#e6ecee"/>
+                <path d="M0 150 C80 140 120 170 200 150 S330 120 400 135" stroke="#cfd9dd" stroke-width="22" fill="none"/>
+                <path d="M210 0 L190 240" stroke="#fff" stroke-width="14"/>
+                <path d="M0 70 L400 95" stroke="#fff" stroke-width="10"/>
+                <path d="M60 0 L90 240 M320 0 L300 240" stroke="#fff" stroke-width="6"/>
+                <path d="M0 200 L400 185" stroke="#f3e2b8" stroke-width="9"/>
+                <rect x="250" y="20" width="60" height="40" rx="4" fill="#dce5e8"/><rect x="100" y="100" width="70" height="38" rx="4" fill="#dce5e8"/>
+                <rect x="230" y="160" width="55" height="20" rx="4" fill="#dce5e8"/><circle cx="350" cy="40" r="14" fill="#d4e5da"/><circle cx="40" cy="110" r="18" fill="#d4e5da"/>
+              </svg>
+              <span class="loc-pin"><img src="images/brand/favis-hand.png" alt=""></span>
+            </div>
+            <div class="loc-list" id="locList"></div>
+          </div>
+        </section>
+
+        <section class="section reveal">
+          <h2>Good to know</h2>
+          <div class="policy-list">
+            <div class="policy"><span id="pIco1"></span><div><b>Driver requirements</b><p>Valid driver's license, ID verification and an accepted payment method. Drivers 21+.</p></div></div>
+            <div class="policy"><span id="pIco2"></span><div><b>Insurance</b><p>Use your own qualifying insurance, or add Favis protection at checkout.</p></div></div>
+            <div class="policy"><span id="pIco3"></span><div><b>Mileage</b><p>200 miles per day included. Additional miles $0.35/mi.</p></div></div>
+            <div class="policy"><span id="pIco4"></span><div><b>Free cancellation</b><p>Cancel up to 24 hours before pickup for a full refund.</p></div></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Booking widget -->
+      <aside class="book-card" aria-label="Reserve this vehicle">
+        <div class="bk-price"><b id="bkRate"></b><span class="cc-rating" id="bkRating"></span></div>
+        <div class="bk-fields">
+          <div class="bk-row">
+            <button type="button" class="bk-field bk-date" id="bkStartBtn" aria-haspopup="dialog" aria-expanded="false"><span class="bk-lbl">Pickup</span><b id="bkStartVal"></b><small id="bkStartTime"></small></button>
+            <button type="button" class="bk-field bk-date" id="bkEndBtn" aria-haspopup="dialog" aria-expanded="false"><span class="bk-lbl">Return</span><b id="bkEndVal"></b><small id="bkEndTime"></small></button>
+          </div>
+          <div class="bk-field full loc-dd" id="locDD">
+            <button type="button" class="loc-btn" id="locBtn" aria-haspopup="listbox" aria-expanded="false">
+              <span class="bk-lbl">Pickup & return location</span>
+              <span class="loc-cur" id="locCur"></span>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <ul class="loc-menu" id="locMenu" role="listbox" aria-label="Pickup and return location"></ul>
+          </div>
+        </div>
+        <div id="bkAlert"></div>
+        <div class="bk-lines" id="bkLines"></div>
+        <div class="bk-total"><span>Estimated total</span><b id="bkTotal"></b></div>
+        <a class="btn btn-primary" id="reserveBtn" href="#">Reserve this car</a>
+        <p class="bk-note">You won't be charged yet. Taxes and protection are added at checkout.</p>
+        <div class="perks" id="perks"></div>
+      </aside>
+    </div>
+
+    <section class="reveal" style="margin-top:40px">
+      <h2 style="font-size:24px;margin-bottom:16px">Similar vehicles</h2>
+      <div class="similar" id="similar"></div>
+    </section>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <div class="lb-top"><span id="lbCount"></span><button class="x-btn" id="lbClose" aria-label="Close">✕</button></div>
+    <div class="lb-stage">
+      <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous photo"></button>
+      <img id="lbImg" alt="">
+      <button class="lb-nav lb-next" id="lbNext" aria-label="Next photo"></button>
+    </div>
+    <div class="lb-thumbs" id="lbThumbs"></div>
+  </div>
+
+  <div id="bottom"></div>
+
+  <script src="fleet.js"></script>
+  <script>
+    renderChrome("fleet");
+    const $ = id => document.getElementById(id);
+    const car = CARS.find(c => c.id === +new URLSearchParams(location.search).get("id")) || CARS[0];
+    let trip = loadTrip();
+    const booked = bookedDays(car);
+    document.title = `${car.name} for rent in Houston | The Favis Group`;
+
+    /* ---------- Header ---------- */
+    $("crumbType").textContent = car.type === "Truck" ? "Pickup trucks" : car.type + "s";
+    $("crumbName").textContent = car.name;
+    $("eyebrow").innerHTML = `<i></i>${car.type} · ${car.color}`;
+    $("title").textContent = car.name;
+    $("meta").innerHTML = `<span class="cc-rating">${stars(car.rating)}<span>(${car.trips} trips)</span></span><span class="dot"></span>
+      ${car.instant ? `<span class="chip chip-teal">${I.bolt} Instant book</span>` : `<span class="chip chip-gold">Approval within 2 hrs</span>`}
+      ${car.fuel === "Hybrid" ? `<span class="chip chip-teal">${I.leaf} Hybrid</span>` : ""}
+      ${car.airport ? `<span class="chip chip-gold">${I.plane} IAH pickup</span>` : ""}`;
+
+    /* ---------- Gallery + lightbox ---------- */
+    const P = car.photos;
+    $("gallery").innerHTML = P.slice(0, 3).map((src, i) => `<button data-photo="${i}" aria-label="Open photo ${i + 1}"><img src="${src}" alt="${car.name} photo ${i + 1}">${i === 2 && P.length > 3 ? `<span class="more">+${P.length - 3} photo${P.length - 3 > 1 ? "s" : ""}</span>` : ""}</button>`).join("");
+    if (P.length < 3) $("gallery").style.gridTemplateColumns = P.length === 1 ? "1fr" : "1.4fr 1fr", $("gallery").querySelectorAll("button").forEach(b => b.style.gridRow = "1 / 3");
+    $("allPhotos").innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>All ${P.length} photos`;
+    let lb = 0;
+    function showLB(i) {
+      lb = (i + P.length) % P.length;
+      $("lbImg").src = P[lb]; $("lbImg").alt = `${car.name} photo ${lb + 1}`;
+      $("lbImg").style.animation = "none"; void $("lbImg").offsetWidth; $("lbImg").style.animation = "";
+      $("lbCount").textContent = `${car.name} · ${lb + 1} / ${P.length}`;
+      $("lbThumbs").querySelectorAll("button").forEach((b, j) => b.classList.toggle("on", j === lb));
+    }
+    $("lbThumbs").innerHTML = P.map((s, i) => `<button data-lb="${i}" aria-label="Photo ${i + 1}"><img src="${s}" alt=""></button>`).join("");
+    $("lbPrev").innerHTML = $("lbNext").innerHTML = I.arrow;
+    const openLB = i => { showLB(i); $("lightbox").classList.add("open"); document.body.style.overflow = "hidden"; $("lbClose").focus(); };
+    const closeLB = () => { $("lightbox").classList.remove("open"); document.body.style.overflow = ""; };
+    $("gallery").addEventListener("click", e => { const b = e.target.closest("[data-photo]"); if (b) openLB(+b.dataset.photo); });
+    $("allPhotos").onclick = () => openLB(0);
+    $("lbThumbs").addEventListener("click", e => { const b = e.target.closest("[data-lb]"); if (b) showLB(+b.dataset.lb); });
+    $("lbPrev").onclick = () => showLB(lb - 1); $("lbNext").onclick = () => showLB(lb + 1); $("lbClose").onclick = closeLB;
+    addEventListener("keydown", e => {
+      if (!$("lightbox").classList.contains("open")) return;
+      if (e.key === "Escape") closeLB(); if (e.key === "ArrowRight") showLB(lb + 1); if (e.key === "ArrowLeft") showLB(lb - 1);
+    });
+
+    /* ---------- Specs + features ---------- */
+    /* Three "gauges" that answer real questions: who fits, what it burns, what it carries */
+    const comb = Math.round((car.mpg[0] + car.mpg[1]) / 2), fleetBest = Math.max(...CARS.map(c => (c.mpg[0] + c.mpg[1]) / 2));
+    const seatIcon = on => `<svg viewBox="0 0 24 24" class="${on ? "on" : ""}"><path d="M7 3h6a2 2 0 0 1 2 2v7h2a2 2 0 0 1 2 2v3H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M8 17v4M16 17v4"/></svg>`;
+    const isBed = car.type === "Truck", cuft = parseFloat(car.cargo), bags = isBed ? 0 : Math.max(1, Math.min(6, Math.round(cuft / 4)));
+    const bagIcon = '<svg viewBox="0 0 24 24"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V4h6v3M9 11v5M15 11v5"/></svg>';
+    $("specSub").textContent = `${car.year} · ${car.color} · ${car.drive}`;
+    const mpgs = CARS.map(c => (c.mpg[0] + c.mpg[1]) / 2), lo = Math.min(...mpgs), hi = Math.max(...mpgs);
+    const pos = Math.round((comb - lo) / (hi - lo) * 100);
+    const fuelWord = pos >= 70 ? "Very fuel efficient" : pos >= 35 ? "Average on fuel" : "Uses more fuel";
+    $("gauges").innerHTML = `
+      <div class="gauge">
+        <span class="g-lbl">Passengers</span>
+        <div class="g-vis seats">${Array.from({ length: car.seats }, () => seatIcon(true)).join("")}</div>
+        <b>${car.seats} people</b><small>${car.seats >= 7 ? "Third row, good for families and groups" : car.type === "Truck" ? "Crew cab with 4 full doors" : "Comfortable for 5 adults"}</small>
+      </div>
+      <div class="gauge">
+        <span class="g-lbl">Fuel economy</span>
+        <div class="g-vis meter"><div class="m-bar"><i style="left:${pos}%"></i></div><div class="m-ends"><span>Uses more</span><span>Saves more</span></div></div>
+        <b>${comb} mpg <em class="${pos < 35 ? "warn" : ""}">· ${fuelWord.toLowerCase()}</em></b><small>${car.mpg[0]} in the city · ${car.mpg[1]} on the highway</small>
+      </div>
+      <div class="gauge">
+        <span class="g-lbl">${isBed ? "Truck bed" : "Luggage space"}</span>
+        <div class="g-vis bags">${isBed ? `<span class="on">${I.bag}</span>` : Array.from({ length: bags }, () => `<span class="on">${bagIcon}</span>`).join("")}</div>
+        <b>${isBed ? car.cargo.replace(" bed", " long bed") : `${bags} carry-on bag${bags > 1 ? "s" : ""}`}</b><small>${isBed ? "Fits furniture, bikes and gear · tow package" : `${car.cargo} of trunk space`}</small>
+      </div>`;
+    const SHEET = [["Transmission", car.transmission], ["Drivetrain", car.drive], ["Fuel", car.fuel], ["Doors", car.doors], ["Model year", car.year], ["Exterior", `<i class="sw" style="background:${COLOR_HEX[car.color]}"></i>${car.color}`]];
+    $("sheet").innerHTML = SHEET.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+
+    /* Features grouped the way renters scan for them */
+    const all = [...car.feats, "Bluetooth audio", "USB charging", "Air conditioning", "Cleaned & sanitized"];
+    const GROUPS = [
+      ["Tech", /carplay|android|touchscreen|bluetooth|usb|wireless/i, '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>'],
+      ["Safety & driving", /camera|blind|lane|cruise|collision|braking|propilot/i, I.shield],
+      ["Comfort", /heated|leather|climate|air cond|remote|keyless|liftgate|clean/i, I.leaf],
+      ["Hauling", /tow|bed/i, I.bag],
+    ];
+    const grouped = GROUPS.map(([g, re, ico]) => [g, ico, all.filter(f => re.test(f))]).filter(([, , l]) => l.length);
+    $("featCount").textContent = `${all.length} included`;
+    $("feats").innerHTML = grouped.map(([g, ico, list]) => `<div class="fg"><h3><span>${ico}</span>${g}</h3><ul>${list.map(f => `<li>${f}</li>`).join("")}</ul></div>`).join("");
+
+    /* ---------- Pricing tiers ---------- */
+    function renderTiers() {
+      const cur = termFor(tripDays(trip));
+      $("tiers").innerHTML = Object.entries(TERMS).map(([k, t]) => {
+        const r = Math.round(car.rate * t.factor);
+        return `<div class="tier ${k === cur ? "on" : ""}">
+          ${t.factor < 1 ? `<span class="chip chip-teal save">Save ${Math.round((1 - t.factor) * 100)}%</span>` : ""}
+          <small>${t.label}${t.min ? ` · ${t.min}+ days` : " · 1–6 days"}</small>
+          <b>${usd(r)}<em>/day</em></b>
+          <span>${k === "daily" ? "Flexible short trips" : k === "weekly" ? `${usd(r * 7)} per week` : `${usd(r * 30)} per 30 days`}</span>
+        </div>`;
+      }).join("");
+    }
+
+    /* ---------- Availability calendar (2 months, range select) ---------- */
+    const today = parseISO(iso(new Date()));
+    let view = new Date(today.getFullYear(), today.getMonth(), 1);
+    let picking = null; // first click of a new range
+    function monthHTML(first, nav) {
+      const days = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+      const lead = first.getDay();
+      let cells = "SMTWTFS".split("").map(d => `<span class="dow">${d}</span>`).join("") + "<span></span>".repeat(lead);
+      for (let d = 1; d <= days; d++) {
+        const dt = new Date(first.getFullYear(), first.getMonth(), d), s = iso(dt);
+        const past = dt < today, isBooked = booked.has(s);
+        const st = s === trip.start, en = s === trip.end, inR = dt > parseISO(trip.start) && dt < parseISO(trip.end);
+        cells += `<button type="button" data-day="${s}" ${past || isBooked ? "disabled" : ""} class="${isBooked ? "booked" : ""} ${st ? "start" : ""} ${en ? "end" : ""} ${inR ? "in" : ""} ${s === iso(today) ? "today" : ""}" aria-label="${dt.toDateString()}${isBooked ? " (booked)" : ""}">${d}</button>`;
+      }
+      return `<div>
+        <div class="cal-head"><b>${first.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</b>${nav}</div>
+        <div class="cal">${cells}</div></div>`;
+    }
+    function renderCal() {
+      const next = new Date(view.getFullYear(), view.getMonth() + 1, 1);
+      const chev = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="${d}"/></svg>`;
+      $("calWrap").innerHTML = monthHTML(view, `<div class="cal-nav"><button type="button" id="calPrev" aria-label="Previous month" ${view <= new Date(today.getFullYear(), today.getMonth(), 1) ? "disabled" : ""}>${chev("M15 18l-6-6 6-6")}</button></div>`)
+        + monthHTML(next, `<div class="cal-nav"><button type="button" id="calNext" aria-label="Next month">${chev("M9 18l6-6-6-6")}</button></div>`);
+    }
+    $("calWrap").addEventListener("click", e => {
+      if (e.target.closest("#calPrev")) { view.setMonth(view.getMonth() - 1); return renderCal(); }
+      if (e.target.closest("#calNext")) { view.setMonth(view.getMonth() + 1); return renderCal(); }
+      const b = e.target.closest("[data-day]"); if (!b || b.disabled) return;
+      const s = b.dataset.day;
+      if (!picking || parseISO(s) <= parseISO(picking)) {
+        picking = s; trip.start = s; const e2 = parseISO(s); e2.setDate(e2.getDate() + 1); trip.end = iso(e2);
+      } else { trip.end = s; picking = null; }
+      update();
+    });
+
+    /* ---------- Booking widget ---------- */
+    /* Location picker: every option visible with detail + fee; IAH shown but disabled when this car can't go there */
+    const LOC_ICON = { hq: I.pin, iah: I.plane, delivery: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11" rx="1"/><path d="M15 9h4l3 4v4h-7"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>' };
+    const fee = l => l.fee ? "+" + usd(l.fee) : "Free";
+    function renderLoc() {
+      const cur = LOCATIONS.find(l => l.id === trip.loc);
+      $("locCur").innerHTML = `<span class="lc-ico">${LOC_ICON[cur.id]}</span><b>${cur.name}</b><em class="${cur.fee ? "" : "free"}">${fee(cur)}</em>`;
+      $("locMenu").innerHTML = LOCATIONS.map(l => {
+        const off = l.id === "iah" && !car.airport;
+        return `<li role="option" data-loc="${l.id}" aria-selected="${l.id === trip.loc}" aria-disabled="${off}" class="${off ? "off" : ""}">
+          <span class="lc-ico">${LOC_ICON[l.id]}</span>
+          <span class="lm-text"><b>${l.name}</b><small>${off ? "Not available for this vehicle" : l.detail}</small></span>
+          ${off ? "" : `<em class="${l.fee ? "" : "free"}">${fee(l)}</em>`}</li>`;
+      }).join("");
+    }
+    const locOpen = on => { $("locDD").classList.toggle("open", on); $("locBtn").setAttribute("aria-expanded", on); };
+    $("locBtn").addEventListener("click", e => { e.stopPropagation(); locOpen(!$("locDD").classList.contains("open")); });
+    $("locMenu").addEventListener("click", e => {
+      e.stopPropagation();
+      const li = e.target.closest("[data-loc]"); if (!li || li.classList.contains("off")) return;
+      trip = { ...trip, loc: li.dataset.loc, ret: li.dataset.loc }; locOpen(false); update();
+    });
+    document.addEventListener("click", () => locOpen(false));
+    addEventListener("keydown", e => { if (e.key === "Escape") locOpen(false); });
+    if (trip.loc === "iah" && !car.airport) trip.loc = "hq";
+    $("bkRating").innerHTML = `${stars(car.rating)}<span>(${car.trips})</span>`;
+    const showDates = () => {
+      const d = s => fmtDate(s, { weekday: "short", month: "short", day: "numeric" });
+      $("bkStartVal").textContent = d(trip.start); $("bkEndVal").textContent = d(trip.end);
+      $("bkStartTime").textContent = fmtTime(trip.stime); $("bkEndTime").textContent = fmtTime(trip.etime);
+    };
+    /* shared picker (fleet.js), with this car's booked days blocked */
+    rangePicker({
+      host: document.querySelector(".bk-fields"), cls: "dp-right",
+      triggers: { start: $("bkStartBtn"), end: $("bkEndBtn") }, blocked: booked,
+      get: () => trip, set: t => { trip = t; }, onChange: showDates,
+      onApply: () => { picking = null; update(); },
+    });
+
+    function update() {
+      saveTrip(trip);
+      const days = tripDays(trip), rate = dayRate(car, days), base = car.rate * days, disc = base - rate * days;
+      const loc = LOCATIONS.find(l => l.id === trip.loc), avail = isAvailable(car, trip);
+      renderLoc(); showDates();
+      $("bkRate").innerHTML = `${usd(rate)}<small> / day</small>`;
+      $("bkLines").innerHTML = `
+        <div><span>${usd(car.rate)} × ${days} day${days > 1 ? "s" : ""}</span><span>${usd(base)}</span></div>
+        ${disc > 0 ? `<div class="disc"><span>${TERMS[termFor(days)].label} discount</span><span>−${usd(disc)}</span></div>` : ""}
+        <div><span>${loc.name}</span><span>${loc.fee ? usd(loc.fee) : "Free"}</span></div>`;
+      $("bkTotal").textContent = usd(rate * days + loc.fee);
+      $("bkTotal").animate([{ opacity: .3, transform: "translateY(-3px)" }, { opacity: 1, transform: "none" }], { duration: 300, easing: "ease-out" });
+      $("bkAlert").innerHTML = avail
+        ? `<div class="bk-alert ok">${I.check}Available ${fmtDate(trip.start)} – ${fmtDate(trip.end)} · ${days} day${days > 1 ? "s" : ""}</div>`
+        : `<div class="bk-alert no">${I.cal}Booked on some of these days. Pick other dates.</div>`;
+      const btn = $("reserveBtn");
+      btn.href = `booking.html?id=${car.id}&${tripQuery(trip)}`;
+      btn.classList.toggle("btn-primary", avail); btn.classList.toggle("btn-ghost", !avail);
+      btn.textContent = avail ? "Reserve this car" : "Choose available dates";
+      if (!avail) btn.href = "#availability";
+      renderTiers(); renderCal();
+    }
+    $("perks").innerHTML = [["Free cancellation up to 24 hrs before", I.check], ["Digital rental agreement, no paperwork", I.check], ["Roadside assistance 24/7", I.shield]].map(([t, ico]) => `<div>${ico}${t}</div>`).join("");
+
+    /* ---------- Locations ---------- */
+    $("locList").innerHTML = LOCATIONS.map(l => `<div class="loc-row"><span class="li">${l.id === "iah" ? I.plane : I.pin}</span><p><b>${l.name}</b><small>${l.detail}</small></p><em>${l.id === "iah" && !car.airport ? "Not for this car" : l.fee ? "+" + usd(l.fee) : "Free"}</em></div>`).join("");
+    ["pIco1", "pIco2", "pIco3", "pIco4"].forEach((id, i) => $(id).innerHTML = [I.user, I.shield, I.fuel, I.check][i]);
+
+    /* ---------- Save / share ---------- */
+    $("saveBtn").onclick = e => { e.currentTarget.classList.toggle("on"); toast(e.currentTarget.classList.contains("on") ? "Saved to your favorites" : "Removed from favorites"); };
+    $("shareBtn").onclick = () => { navigator.clipboard?.writeText(location.href).catch(() => {}); toast("Link copied"); };
+
+    /* ---------- Similar ---------- */
+    const sim = CARS.filter(c => c.id !== car.id && c.type === car.type).sort((a, b) => Math.abs(a.rate - car.rate) - Math.abs(b.rate - car.rate)).slice(0, 4);
+    $("similar").innerHTML = sim.map((c, i) => `
+      <a class="car-card" style="--i:${i}" href="car.html?id=${c.id}&${tripQuery(trip)}">
+        <div class="cc-media"><img src="${c.photos[0]}" alt="${c.name}" loading="lazy">${c.photos[1] ? `<img class="alt" src="${c.photos[1]}" alt="" loading="lazy">` : ""}</div>
+        <div class="cc-body">
+          <div class="cc-title"><div><h3>${c.name}</h3><small><i style="background:${COLOR_HEX[c.color]}"></i>${c.color}</small></div><span class="cc-rating">${stars(c.rating)}</span></div>
+          <div class="cc-foot"><div class="cc-price"><b>${usd(dayRate(c, tripDays(trip)))}<small>/day</small></b></div><span class="chip chip-teal">View ${I.arrow}</span></div>
+        </div>
+      </a>`).join("");
+
+    update(); reveal();
+  </script>
+</body>
+</html>
