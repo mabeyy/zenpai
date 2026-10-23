@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Trips | The Favis Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/jpeg" href="images/brand/favis-logo.jpg">
+  <link rel="stylesheet" href="favis.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="app-body">
+  <div class="app">
+    <aside class="side" id="side">
+      <a class="brand" href="cars.html"><span class="mark"><img src="images/brand/favis-hand.png" alt=""></span><span class="word"><b>THE FAVIS</b><small>GROUP · HOUSTON</small></span></a>
+      <nav class="side-nav" id="sideNav"></nav>
+      <div class="side-foot">
+        <div class="side-card"><b>Need a car for longer?</b>Monthly rentals save up to 30% versus daily rates.<br><a href="cars.html">Browse monthly →</a></div>
+        <div class="side-user"><span class="avatar">AC</span><div><b>Ana Cruz</b><small>Gold member</small></div></div>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <button class="t-icon menu-btn" id="menuBtn" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <h1><span id="greet"></span><small>Here's what's coming up with your rentals.</small></h1>
+        <label class="t-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input placeholder="Search trips, invoices…" aria-label="Search"></label>
+        <button class="t-icon" aria-label="Notifications" onclick="document.getElementById('notifCard').scrollIntoView({behavior:'smooth'})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><span class="dot"></span></button>
+        <a class="btn btn-primary btn-sm" href="cars.html">Book a car</a>
+      </header>
+
+      <main class="app-content">
+        <!-- Upcoming trip -->
+        <section class="trip-hero" id="overview">
+          <div class="th-img"><img id="thImg" alt=""></div>
+          <div class="th-body">
+            <span class="eyebrow"><i></i>Upcoming trip · <span id="thRef"></span></span>
+            <h2 id="thName"></h2>
+            <div class="countdown" id="countdown"></div>
+            <div class="th-legs" id="thLegs"></div>
+            <div class="th-actions">
+              <a class="btn btn-gold btn-sm" href="https://maps.google.com/?q=2315+Greens+Rd+Houston+TX+77032" target="_blank" rel="noopener">Get directions</a>
+              <button class="btn btn-ghost btn-sm" onclick="toast('Modify request sent to Favis')">Modify</button>
+              <button class="btn btn-ghost btn-sm" id="cancelBtn">Cancel trip</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid-2">
+          <section class="card">
+            <div class="card-head"><h2>Before pickup</h2><span class="link" id="readyCount"></span></div>
+            <div class="checklist" id="checklist"></div>
+          </section>
+          <section class="card loyalty" id="loyalty">
+            <div class="card-head"><h2>Favis Rewards</h2><span class="tier">★ Gold</span></div>
+            <div class="pts" id="pts">0 <small>points</small></div>
+            <div class="tier-bar"><i id="tierBar"></i></div>
+            <p>660 points to <b style="color:var(--gold)">Platinum</b>: free delivery and a guaranteed upgrade.</p>
+            <div class="perk-row"><span>5% back on every trip</span><span>Free IAH pickup</span><span>Priority support</span></div>
+          </section>
+        </div>
+
+        <section class="card" id="trips">
+          <div class="card-head"><h2>My trips</h2>
+            <div class="tabs-mini" id="tripTabs"><button class="on" data-t="upcoming">Upcoming</button><button data-t="past">Past</button><button data-t="cancelled">Cancelled</button></div>
+          </div>
+          <div class="trip-list" id="tripList"></div>
+        </section>
+
+        <div class="grid-2">
+          <section class="card" id="invoices">
+            <div class="card-head"><h2>Invoices & receipts</h2><a href="#">Export all</a></div>
+            <table class="tbl" id="invTable"></table>
+          </section>
+          <section class="card" id="notifCard">
+            <div class="card-head"><h2>Notifications</h2><button class="link" id="markRead">Mark all read</button></div>
+            <div class="notif" id="notif"></div>
+          </section>
+        </div>
+
+        <div class="grid-2">
+          <section class="card" id="documents">
+            <div class="card-head"><h2>Driver profile & documents</h2><a href="#">Edit profile</a></div>
+            <div class="docs" id="docs"></div>
+          </section>
+          <section class="card" id="payments">
+            <div class="card-head"><h2>Payment methods</h2><a href="#">Add new</a></div>
+            <div class="pay-card"><span class="cc" style="background:#1a1f71">VISA</span><div><b>Visa ending 4242</b><small>Expires 08/29 · Default</small></div></div>
+            <div class="pay-card"><span class="cc" style="background:#eb001b">MC</span><div><b>Mastercard ending 1881</b><small>Expires 02/28</small></div></div>
+            <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:12px" onclick="toast('Support ticket opened, we reply within 1 hour')">Contact support</button>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="fleet.js"></script>
+  <script>
+    document.body.insertAdjacentHTML("beforeend", '<div class="toast" id="toast" role="status"></div>');
+    const $ = id => document.getElementById(id);
+    const today = parseISO(iso(new Date()));
+    const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+
+    /* ---------- Sidebar ---------- */
+    const NAV = [["overview", "Overview", I.cal], ["trips", "My trips", I.pin, "1"], ["invoices", "Invoices", I.bag], ["documents", "Documents", I.shield], ["payments", "Payments", I.gear], ["loyalty", "Rewards", I.star], ["notifCard", "Notifications", I.clock, "2"]];
+    $("sideNav").innerHTML = NAV.map(([id, l, ico, n], i) => `<a href="#${id}" class="${i ? "" : "on"}">${ico}${l}${n ? `<em>${n}</em>` : ""}</a>`).join("")
+      + `<div class="side-label">Explore</div><a href="cars.html">${I.arrow}Browse fleet</a>`;
+    $("sideNav").querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener("click", () => $("side").classList.remove("open")));
+    $("menuBtn").onclick = () => $("side").classList.toggle("open");
+    const spy = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) $("sideNav").querySelectorAll("a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id));
+    }), { rootMargin: "-40% 0px -55% 0px" });
+    NAV.forEach(([id]) => $(id) && spy.observe($(id)));
+    const h = new Date().getHours();
+    $("greet").textContent = `Good ${h < 12 ? "morning" : h < 18 ? "afternoon" : "evening"}, Ana`;
+
+    /* ---------- Sample trips ---------- */
+    const mk = (carId, startIn, len, status, ref, total) => {
+      const c = CARS.find(x => x.id === carId), s = addDays(today, startIn), e = addDays(s, len);
+      return { car: c, start: s, end: e, len, status, ref, total: total ?? Math.round(dayRate(c, len) * len * 1.18) };
+    };
+    const TRIPS = [
+      mk(11, 3, 4, "confirmed", "FV-K7Q2M"),
+      mk(18, 24, 2, "pending", "FV-P3X9A"),
+      mk(6, -21, 5, "done", "FV-H2B8C"),
+      mk(13, -58, 7, "done", "FV-D9L4R"),
+      mk(1, -96, 30, "done", "FV-A1Z6T"),
+      mk(15, -130, 3, "cancelled", "FV-C0N2E", 0),
+    ];
+    const next = TRIPS[0];
+    const fmt = (d, o = { weekday: "short", month: "short", day: "numeric" }) => d.toLocaleDateString("en-US", o);
+
+    /* ---------- Upcoming hero ---------- */
+    $("thImg").src = next.car.photos[0]; $("thImg").alt = next.car.name;
+    $("thRef").textContent = next.ref;
+    $("thName").innerHTML = `${next.car.name}<small>${next.car.color} · ${next.len} days · Confirmed by Favis</small>`;
+    $("thLegs").innerHTML = `<div><small>Pickup</small><b>${fmt(next.start)}, 10:00 AM</b><span>Houston HQ · 2315 Greens Rd</span></div>
+      <div><small>Return</small><b>${fmt(next.end)}, 10:00 AM</b><span>Houston HQ</span></div>`;
+    const pickupAt = new Date(next.start); pickupAt.setHours(10, 0, 0, 0);
+    function tick() {
+      let s = Math.max(0, (pickupAt - new Date()) / 1000 | 0);
+      const parts = [["days", s / 86400 | 0], ["hrs", s % 86400 / 3600 | 0], ["min", s % 3600 / 60 | 0], ["sec", s % 60]];
+      $("countdown").innerHTML = parts.map(([l, v]) => `<div><b>${String(v).padStart(2, "0")}</b><small>${l}</small></div>`).join("");
+    }
+    tick(); setInterval(tick, 1000);
+    $("cancelBtn").onclick = () => {
+      if (confirm(`Cancel your ${next.car.name} trip? You're still inside the free cancellation window.`)) toast("Trip cancelled. Full refund in 3–5 business days");
+    };
+
+    /* ---------- Checklist ---------- */
+    const CHECKS = [
+      ["Driver's license verified", "Texas license · checked Oct 21", true],
+      ["ID verification complete", "Stripe Identity · 2 min", true],
+      ["Insurance on file", "Favis Standard protection selected", true],
+      ["Sign rental agreement", "Required before pickup", false],
+    ];
+    function renderChecks() {
+      $("checklist").innerHTML = CHECKS.map(([t, s, ok], i) => `<div class="check-item ${ok ? "done" : ""}"><span class="ci">${I.check}</span><div><b>${t}</b><small>${s}</small></div>${ok ? "" : `<button class="btn btn-primary btn-sm" data-sign="${i}">Sign now</button>`}</div>`).join("");
+      const done = CHECKS.filter(c => c[2]).length;
+      $("readyCount").textContent = `${done} of ${CHECKS.length} done`;
+    }
+    $("checklist").addEventListener("click", e => {
+      const b = e.target.closest("[data-sign]"); if (!b) return;
+      CHECKS[+b.dataset.sign][2] = true; CHECKS[+b.dataset.sign][1] = "Signed just now";
+      renderChecks(); toast("Agreement signed. You're all set for pickup!");
+    });
+    renderChecks();
+
+    /* ---------- Loyalty (count up) ---------- */
+    const PTS = 2340;
+    new IntersectionObserver((es, o) => es.forEach(e => {
+      if (!e.isIntersecting) return; o.disconnect();
+      const t0 = performance.now();
+      (function step(t) { const k = Math.min(1, (t - t0) / 1200), v = Math.round(PTS * (1 - Math.pow(1 - k, 3)));
+        $("pts").innerHTML = `${v.toLocaleString()} <small>points</small>`; if (k < 1) requestAnimationFrame(step); })(t0);
+      $("tierBar").style.width = (PTS / 3000 * 100) + "%";
+    }), { threshold: .4 }).observe($("loyalty"));
+
+    /* ---------- Trips list ---------- */
+    const BADGE = { confirmed: ["b-confirmed", "Confirmed"], pending: ["b-pending", "Awaiting approval"], done: ["b-done", "Completed"], cancelled: ["b-due", "Cancelled"] };
+    function renderTrips(tab) {
+      const list = TRIPS.filter(t => tab === "upcoming" ? ["confirmed", "pending"].includes(t.status) : tab === "past" ? t.status === "done" : t.status === "cancelled");
+      $("tripList").innerHTML = list.map((t, i) => `<div class="trip-row" style="animation-delay:${i * 50}ms">
+        <img src="${t.car.photos[0]}" alt="">
+        <div><b>${t.car.name}</b><small>${fmt(t.start, { month: "short", day: "numeric" })} – ${fmt(t.end, { month: "short", day: "numeric", year: "numeric" })} · ${t.len} days · ${t.ref}</small></div>
+        <span class="badge ${BADGE[t.status][0]}">${BADGE[t.status][1]}</span>
+        <div class="amt">${t.total ? usd(t.total) : "—"}<small>${t.status === "done" ? `+${Math.round(t.total * .05 * 10)} pts` : t.status === "cancelled" ? "Refunded" : "Pay at confirmation"}</small></div>
+      </div>`).join("") || `<p class="empty-sm">No ${tab} trips.</p>`;
+    }
+    $("tripTabs").addEventListener("click", e => {
+      const b = e.target.closest("[data-t]"); if (!b) return;
+      $("tripTabs").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+      renderTrips(b.dataset.t);
+    });
+    renderTrips("upcoming");
+
+    /* ---------- Invoices ---------- */
+    const DL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12m-5-5 5 5 5-5M5 21h14"/></svg>';
+    $("invTable").innerHTML = `<thead><tr><th>Invoice</th><th>Vehicle</th><th>Status</th><th class="num">Amount</th><th></th></tr></thead><tbody>`
+      + TRIPS.filter(t => t.status !== "cancelled").map((t, i) => `<tr>
+        <td><b>INV-${2026100 - i * 7}</b><br><small style="color:var(--ink-3)">${fmt(t.start, { month: "short", day: "numeric", year: "numeric" })}</small></td>
+        <td>${t.car.name}</td>
+        <td><span class="badge ${t.status === "done" ? "b-paid" : "b-pending"}">${t.status === "done" ? "Paid" : "Upcoming"}</span></td>
+        <td class="num">${usd(t.total)}</td>
+        <td><button class="dl" onclick="toast('Downloading INV-${2026100 - i * 7}.pdf')">${DL}PDF</button></td></tr>`).join("") + "</tbody>";
+
+    /* ---------- Notifications ---------- */
+    const NOTES = [
+      [`Your ${next.car.name} is confirmed`, "Pickup " + fmt(next.start) + " at 10:00 AM", false],
+      ["Sign your rental agreement", "1 step left before pickup", false],
+      ["You earned 74 points", "From your Encore GX trip", true],
+      ["Monthly rentals now 30% off", "New long-term pricing for Houston", true],
+    ];
+    const renderNotes = () => $("notif").innerHTML = NOTES.map(([t, s, r]) => `<div><i class="${r ? "read" : ""}"></i><span><b>${t}</b><small>${s}</small></span></div>`).join("");
+    $("markRead").onclick = () => { NOTES.forEach(n => n[2] = true); renderNotes(); document.querySelector(".t-icon .dot")?.remove(); toast("All caught up"); };
+    renderNotes();
+
+    /* ---------- Documents ---------- */
+    $("docs").innerHTML = [
+      [I.user, "Driver's license", "Texas · exp. Mar 2029", "b-active", "Verified"],
+      [I.shield, "Insurance card", "Progressive · exp. Jan 2027", "b-active", "Verified"],
+      [I.check, "Identity check", "Stripe Identity · Oct 21, 2026", "b-active", "Passed"],
+      [I.bag, "Rental agreement", `For trip ${next.ref}`, "b-pending", "Sign before pickup"],
+    ].map(([ico, t, s, b, l]) => `<div class="doc"><span class="di">${ico}</span><div><b>${t}</b><small>${s}</small></div><span class="badge ${b}">${l}</span></div>`).join("");
+  </script>
+</body>
+</html>

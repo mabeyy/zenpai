@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservations | Favis Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/jpeg" href="images/brand/favis-logo.jpg">
+  <link rel="stylesheet" href="favis.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="app-body">
+  <div class="app">
+    <aside class="side" id="side">
+      <a class="brand" href="admin.html"><span class="mark"><img src="images/brand/favis-hand.png" alt=""></span><span class="word"><b>THE FAVIS</b><small>ADMIN CONSOLE</small></span></a>
+      <nav class="side-nav" id="sideNav"></nav>
+      <div class="side-foot">
+        <div class="side-card"><b>iFleet sync</b>Availability synced 2 min ago. Turo calendar: connected.<br><a href="#" onclick="toast('Sync started');return false">Sync now →</a></div>
+        <div class="side-user"><span class="avatar" style="background:linear-gradient(135deg,#d5b36a,#b8954a);color:#0a1823">OP</span><div><b>Operations</b><small>Admin access</small></div></div>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <button class="t-icon menu-btn" id="menuBtn" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <h1>Reservations<small id="todayLbl"></small></h1>
+        <label class="t-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" placeholder="Search customer, car or ref…" aria-label="Search reservations"></label>
+        <button class="t-icon" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><span class="dot"></span></button>
+        <button class="btn btn-primary btn-sm" onclick="toast('New reservation form (coming soon)')">+ New reservation</button>
+      </header>
+
+      <main class="app-content">
+        <section class="kpis" id="kpis"></section>
+
+        <section class="card">
+          <div class="adm-tools">
+            <div class="tabs-mini" id="typeTabs"></div>
+            <div class="legend">
+              <span><i style="background:#0f766e"></i>On trip</span>
+              <span><i style="background:#1d4ed8"></i>Confirmed</span>
+              <span><i style="background:repeating-linear-gradient(135deg,#f59e0b 0 4px,#f5a623 4px 8px)"></i>Needs approval</span>
+              <span><i style="background:#9aa3ad"></i>Maintenance</span>
+            </div>
+          </div>
+          <div class="gantt-wrap"><div class="gantt" id="gantt"></div></div>
+        </section>
+
+        <div class="grid-2">
+          <section class="card">
+            <div class="card-head"><h2>Revenue · last 14 days</h2><span class="link" id="revTotal"></span></div>
+            <div class="rev-chart" id="revChart"></div>
+            <div class="rev-axis" id="revAxis"></div>
+          </section>
+          <section class="card">
+            <div class="card-head"><h2>Approval queue</h2><span class="badge b-pending" id="apprCount"></span></div>
+            <div class="approvals" id="approvals"></div>
+          </section>
+        </div>
+
+        <section class="card">
+          <div class="card-head"><h2>Utilization by type · next 7 days</h2><a href="#">Full report</a></div>
+          <div class="util" id="util"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Booking drawer -->
+  <div class="drawer-scrim" id="scrim"></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Reservation details">
+    <div class="dr-img"><img id="drImg" alt=""><span class="badge" id="drBadge"></span><button class="x-btn" id="drClose" aria-label="Close">✕</button></div>
+    <div class="dr-body" id="drBody"></div>
+    <div class="dr-foot" id="drFoot"></div>
+  </aside>
+
+  <script src="fleet.js"></script>
+  <script>
+    document.body.insertAdjacentHTML("beforeend", '<div class="toast" id="toast" role="status"></div>');
+    const $ = id => document.getElementById(id);
+    const today = parseISO(iso(new Date()));
+    const DAYS = 21, START = -3;   // calendar window: 3 days back, 18 ahead
+    const dayAt = i => { const d = new Date(today); d.setDate(d.getDate() + START + i); return d; };
+    $("todayLbl").textContent = today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }) + " · Houston HQ";
+
+    /* ---------- Sidebar ---------- */
+    $("sideNav").innerHTML = [
+      [I.cal, "Reservations", 1, "3"], [I.pin, "Fleet"], [I.user, "Customers"], [I.bag, "Payments & refunds"], [I.shield, "Damage claims"],
+      [I.gear, "Maintenance"], [I.star, "Reports"], [I.check, "Owners"],
+    ].map(([ico, l, on, n]) => `<a href="#" class="${on ? "on" : ""}">${ico}${l}${n ? `<em id="navCount">${n}</em>` : ""}</a>`).join("")
+      + `<div class="side-label">Public site</div><a href="cars.html">${I.arrow}View storefront</a>`;
+    $("menuBtn").onclick = () => $("side").classList.toggle("open");
+
+    /* ---------- Sample reservations (deterministic) ---------- */
+    const NAMES = ["Ana Cruz", "James Carter", "Maria Lopez", "David Kim", "Ashley Brown", "Luis Garcia", "Emily Nguyen", "Chris Johnson", "Sofia Rossi", "Tyrone Harris", "Priya Patel", "Kevin Lee", "Grace Okafor", "Daniel Moore", "Hannah White", "Omar Haddad"];
+    const SOURCES = ["Website", "Website", "Turo", "Corporate", "Website", "Phone"];
+    let BOOKINGS = [];
+    CARS.forEach((c, i) => {
+      let cursor = START + ((i * 3) % 5) - 2;
+      let k = 0;
+      while (cursor < START + DAYS) {
+        const len = 2 + ((i + k * 3) % 6);
+        const gap = 1 + ((i * 7 + k) % 4);
+        const s = cursor, e = s + len;
+        let status = s <= 0 && e > 0 ? "active" : s > 0 ? "confirmed" : "done";
+        if (s > 0 && s < 12 && (i + k) % 4 === 1) status = "pending";
+        if ((i + k) % 11 === 5) status = "maint";
+        if (e > START) BOOKINGS.push({
+          id: `FV-${(1000 + i * 37 + k * 11).toString(36).toUpperCase()}${i}`, car: c.id, s, e, status,
+          name: status === "maint" ? "Scheduled service" : NAMES[(i * 5 + k * 3) % NAMES.length],
+          source: SOURCES[(i + k) % SOURCES.length], loc: ["hq", "iah", "hq", "delivery"][(i + k) % 4],
+          docs: (i + k) % 5 !== 2,
+        });
+        cursor = e + gap; k++;
+      }
+    });
+    const carOf = b => CARS.find(c => c.id === b.car);
+    const dateOf = off => { const d = new Date(today); d.setDate(d.getDate() + off); return d; };
+    const fmt = d => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const totalOf = b => { const c = carOf(b), n = b.e - b.s; return dayRate(c, n) * n + (LOCATIONS.find(l => l.id === b.loc).fee); };
+    let typeFilter = "All", query = "";
+
+    /* ---------- KPIs ---------- */
+    function renderKpis() {
+      const live = BOOKINGS.filter(b => b.status !== "maint");
+      const pickups = live.filter(b => b.s === 0).length, returns = live.filter(b => b.e === 0 || b.e === 1).length;
+      const onTrip = BOOKINGS.filter(b => b.status === "active").length;
+      let used = 0; BOOKINGS.forEach(b => { if (b.status === "maint") return; for (let d = Math.max(b.s, 0); d < Math.min(b.e, 7); d++) used++; });
+      const util = Math.round(used / (CARS.length * 7) * 100);
+      const pend = BOOKINGS.filter(b => b.status === "pending").length;
+      $("kpis").innerHTML = [
+        ["On trip now", `${onTrip}<small style="font-size:15px;color:var(--ink-3)"> / ${CARS.length}</small>`, `${pickups} pickups · ${returns} returns today`, I.pin],
+        ["Utilization (7 days)", util + "%", "▲ 6 pts vs last week", I.cal],
+        ["Revenue this month", usd(48260), "▲ 12% vs last month", I.bag],
+        ["Needs approval", pend, pend ? "Documents ready to review" : "All clear", I.clock],
+      ].map(([l, v, d, ico]) => `<div class="kpi"><div class="kpi-top"><small>${l}</small><span class="kpi-ico">${ico}</span></div><b>${v}</b><span class="delta">${d}</span></div>`).join("");
+      $("navCount").textContent = pend; $("navCount").style.display = pend ? "" : "none";
+    }
+
+    /* ---------- Gantt calendar ---------- */
+    const TYPES = ["All", "SUV", "Sedan", "Truck"];
+    $("typeTabs").innerHTML = TYPES.map(t => `<button data-type="${t}" class="${t === "All" ? "on" : ""}">${t === "All" ? "All vehicles" : t + "s"}</button>`).join("");
+    $("typeTabs").addEventListener("click", e => {
+      const b = e.target.closest("[data-type]"); if (!b) return;
+      typeFilter = b.dataset.type; $("typeTabs").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderGantt();
+    });
+    $("q").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); renderGantt(); });
+
+    function renderGantt() {
+      const head = Array.from({ length: DAYS }, (_, i) => {
+        const d = dayAt(i), wk = d.getDay() === 0 || d.getDay() === 6;
+        return `<div class="g-day ${wk ? "wknd" : ""} ${START + i === 0 ? "today" : ""}">${d.toLocaleDateString("en-US", { weekday: "short" })}<b>${d.getDate()}</b></div>`;
+      }).join("");
+      const cars = CARS.filter(c => typeFilter === "All" || c.type === typeFilter).filter(c => !query ||
+        `${c.name} ${c.color}`.toLowerCase().includes(query) || BOOKINGS.some(b => b.car === c.id && `${b.name} ${b.id}`.toLowerCase().includes(query)));
+      const rows = cars.map((c, ri) => {
+        const bars = BOOKINGS.filter(b => b.car === c.id && b.e > START && b.s < START + DAYS).map(b => {
+          const from = Math.max(b.s, START) - START, to = Math.min(b.e, START + DAYS) - START;
+          const match = !query || `${b.name} ${b.id}`.toLowerCase().includes(query) || `${c.name}`.toLowerCase().includes(query);
+          const ini = b.status === "maint" ? "🔧" : b.name.split(" ").map(w => w[0]).join("");
+          return `<button class="bar ${b.status === "done" ? "confirmed" : b.status}" data-b="${b.id}" style="left:calc(var(--col) * ${from} + 3px);width:calc(var(--col) * ${to - from} - 6px);opacity:${match ? 1 : .25};animation-delay:${ri * 25}ms"
+            title="${b.name} · ${fmt(dateOf(b.s))}–${fmt(dateOf(b.e))}"><span class="bav">${ini}</span>${to - from > 1 ? b.name : ""}</button>`;
+        }).join("");
+        return `<div class="g-row"><div class="g-car"><img src="${c.photos[0]}" alt=""><div style="min-width:0"><b>${c.name}</b><small>${c.color} · ${c.type} · ${usd(c.rate)}/d</small></div></div>
+          <div class="g-track"><span class="g-today" style="left:calc(var(--col) * ${-START} + var(--col) / 2)"></span>${bars}</div></div>`;
+      }).join("");
+      $("gantt").innerHTML = `<div class="g-head"><div class="g-car">${cars.length} vehicles</div><div class="g-days">${head}</div></div>${rows || '<p class="empty-sm">No matches</p>'}`;
+    }
+    $("gantt").addEventListener("click", e => { const b = e.target.closest("[data-b]"); if (b) openDrawer(b.dataset.b); });
+
+    /* ---------- Approval queue ---------- */
+    function renderApprovals() {
+      const list = BOOKINGS.filter(b => b.status === "pending").sort((a, b) => a.s - b.s);
+      $("apprCount").textContent = `${list.length} waiting`;
+      $("approvals").innerHTML = list.length ? list.map((b, i) => {
+        const c = carOf(b);
+        return `<div class="appr" data-appr="${b.id}" style="animation-delay:${i * 50}ms">
+          <div class="appr-top"><span class="avatar">${b.name.split(" ").map(w => w[0]).join("")}</span><div style="min-width:0"><b>${b.name}</b><small>${c.name} · ${fmt(dateOf(b.s))}–${fmt(dateOf(b.e))} · ${usd(totalOf(b))}</small></div></div>
+          <div class="appr-checks"><span>${I.check}License</span><span>${I.check}ID verified</span><span class="${b.docs ? "" : "warn"}">${b.docs ? I.check + "Insurance" : "Insurance missing"}</span><span>${I.check}${b.source}</span></div>
+          <div class="appr-actions"><button class="btn btn-ghost" data-view="${b.id}">Review</button><button class="btn btn-danger" data-decline="${b.id}">Decline</button><button class="btn btn-primary" data-approve="${b.id}">Approve</button></div>
+        </div>`;
+      }).join("") : `<p class="empty-sm">🎉 Queue clear. Every request has been reviewed.</p>`;
+    }
+    function setStatus(id, status) {
+      const b = BOOKINGS.find(x => x.id === id);
+      const card = document.querySelector(`[data-appr="${id}"]`);
+      const done = () => {
+        if (status === "declined") BOOKINGS = BOOKINGS.filter(x => x.id !== id); else b.status = status;
+        renderAll();
+        if (status !== "declined") document.querySelector(`[data-b="${id}"]`)?.classList.add("flash");
+      };
+      card ? (card.classList.add("leaving"), setTimeout(done, 280)) : done();
+      toast(status === "declined" ? `Declined ${b.name}'s request · customer notified` : `Approved · confirmation sent to ${b.name}`);
+    }
+    document.addEventListener("click", e => {
+      const a = e.target.closest("[data-approve]"), d = e.target.closest("[data-decline]"), v = e.target.closest("[data-view]");
+      if (a) { setStatus(a.dataset.approve, "confirmed"); closeDrawer(); }
+      if (d) { setStatus(d.dataset.decline, "declined"); closeDrawer(); }
+      if (v) openDrawer(v.dataset.view);
+    });
+
+    /* ---------- Drawer ---------- */
+    const STATUS = { active: ["b-active", "On trip"], confirmed: ["b-confirmed", "Confirmed"], pending: ["b-pending", "Needs approval"], maint: ["b-maint", "Maintenance"], done: ["b-done", "Completed"] };
+    let current;
+    function openDrawer(id) {
+      const b = BOOKINGS.find(x => x.id === id); if (!b) return;
+      current = b; const c = carOf(b), loc = LOCATIONS.find(l => l.id === b.loc);
+      $("drImg").src = c.photos[0];
+      $("drBadge").className = "badge " + STATUS[b.status][0]; $("drBadge").textContent = STATUS[b.status][1];
+      $("drBody").innerHTML = `
+        <h3>${c.name}<small>${c.color} · ${b.id} · via ${b.source}</small></h3>
+        ${b.status === "maint" ? "" : `<div class="dr-person"><span class="avatar">${b.name.split(" ").map(w => w[0]).join("")}</span><div><b>${b.name}</b><small>(281) 555-0${100 + b.car} · ${b.name.split(" ")[0].toLowerCase()}@example.com</small></div><a class="t-icon" href="tel:2815550100" aria-label="Call">${I.phone}</a></div>`}
+        <div class="dr-grid">
+          <div><small>Pickup</small><b>${fmt(dateOf(b.s))} · 10:00 AM</b></div>
+          <div><small>Return</small><b>${fmt(dateOf(b.e))} · 10:00 AM</b></div>
+          <div><small>Location</small><b>${loc.name}</b></div>
+          <div><small>${b.status === "maint" ? "Service" : "Total"}</small><b>${b.status === "maint" ? "Oil · tires · inspection" : usd(totalOf(b))}</b></div>
+        </div>
+        ${b.status === "maint" ? "" : `<div class="appr-checks"><span>${I.check}License verified</span><span>${I.check}ID verified</span><span class="${b.docs ? "" : "warn"}">${b.docs ? I.check + "Insurance on file" : "Insurance missing"}</span><span>${I.check}Agreement ${b.status === "pending" ? "pending" : "signed"}</span></div>`}`;
+      const sameType = CARS.filter(x => x.type === c.type && x.id !== c.id && BOOKINGS.every(o => o.car !== x.id || o.e <= b.s || o.s >= b.e));
+      $("drFoot").innerHTML = b.status === "pending"
+        ? `<div class="row"><button class="btn btn-danger" data-decline="${b.id}">Decline</button><button class="btn btn-primary" data-approve="${b.id}">Approve</button></div>`
+        : b.status === "maint" ? `<button class="btn btn-dark" id="drDone">Mark service complete</button>`
+        : `<label style="font-size:12.5px;font-weight:600;color:var(--ink-2)">Reassign vehicle</label>
+           <div class="row"><select id="reassign" style="flex:1">${sameType.length ? sameType.map(x => `<option value="${x.id}">${x.name} · ${x.color}</option>`).join("") : "<option>No free vehicles of this type</option>"}</select>
+           <button class="btn btn-dark" id="doReassign" ${sameType.length ? "" : "disabled"} style="flex:none">Move</button></div>
+           <button class="btn btn-ghost" onclick="toast('Receipt re-sent to customer')">Resend confirmation</button>`;
+      $("drawer").classList.add("open"); $("scrim").classList.add("show");
+      setTimeout(() => $("drClose").focus(), 50);
+    }
+    function closeDrawer() { $("drawer").classList.remove("open"); $("scrim").classList.remove("show"); }
+    $("drClose").onclick = closeDrawer; $("scrim").onclick = closeDrawer;
+    addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+    $("drFoot").addEventListener("click", e => {
+      if (e.target.id === "doReassign") {
+        const to = +$("reassign").value, from = carOf(current);
+        current.car = to; closeDrawer(); renderAll();
+        document.querySelector(`[data-b="${current.id}"]`)?.classList.add("flash");
+        document.querySelector(`[data-b="${current.id}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" });
+        toast(`Moved ${current.name} from ${from.model} to ${carOf(current).name}`);
+      }
+      if (e.target.id === "drDone") { BOOKINGS = BOOKINGS.filter(x => x !== current); closeDrawer(); renderAll(); toast("Service complete · vehicle back in rotation"); }
+    });
+
+    /* ---------- Revenue + utilization ---------- */
+    const REV = [1840, 2210, 1990, 2640, 3120, 3480, 2380, 2050, 2290, 2560, 2910, 3390, 3620, 2780];
+    $("revChart").innerHTML = REV.map((v, i) => `<div style="height:${v / Math.max(...REV) * 100}%;animation-delay:${i * 35}ms" data-v="${usd(v)}"></div>`).join("");
+    $("revAxis").innerHTML = `<span>${fmt(dateOf(-13))}</span><span>${fmt(dateOf(-7))}</span><span>Today</span>`;
+    $("revTotal").textContent = usd(REV.reduce((a, b) => a + b, 0)) + " total";
+    function renderUtil() {
+      $("util").innerHTML = ["SUV", "Sedan", "Truck"].map(t => {
+        const cs = CARS.filter(c => c.type === t); let used = 0;
+        BOOKINGS.forEach(b => { if (b.status === "maint" || !cs.some(c => c.id === b.car)) return; for (let d = Math.max(b.s, 0); d < Math.min(b.e, 7); d++) used++; });
+        const pct = Math.round(used / (cs.length * 7) * 100);
+        return `<div><span>${t}s</span><span class="bar-bg"><i data-w="${pct}"></i></span><b>${pct}%</b></div>`;
+      }).join("");
+      requestAnimationFrame(() => $("util").querySelectorAll("i").forEach(i => i.style.width = i.dataset.w + "%"));
+    }
+
+    function renderAll() { renderKpis(); renderGantt(); renderApprovals(); renderUtil(); }
+    renderAll();
+  </script>
+</body>
+</html>
