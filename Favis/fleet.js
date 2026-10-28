@@ -146,6 +146,7 @@ function rangePicker(o) {
     </div>`;
   o.host.appendChild(el);
   const R = k => el.querySelector(`[data-r="${k}"]`);
+  scrollHint(R("quick"));
   const today = parseISO(iso(new Date()));
   const addD = (s, n) => { const d = parseISO(s); d.setDate(d.getDate() + n); return iso(d); };
   const short = s => fmtDate(s, { weekday: "short", month: "short", day: "numeric" });
@@ -212,10 +213,16 @@ function rangePicker(o) {
   }
   const closeTP = () => el.querySelectorAll(".tp.open").forEach(p => { p.classList.remove("open"); p.previousElementSibling.setAttribute("aria-expanded", "false"); });
 
+  /* bring the calendar on screen (it opens below the fold on phones) */
+  const reveal = () => setTimeout(() => {
+    const r = el.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > innerHeight) el.scrollIntoView({ behavior: "smooth", block: r.height > innerHeight ? "start" : "nearest" });
+  }, 60);
   function open(m) {
     snap = { ...T() }; mode = m; hover = null;
     const s = parseISO(T().start); view = new Date(s.getFullYear(), s.getMonth(), 1);
     el.hidden = false; requestAnimationFrame(() => el.classList.add("open"));
+    reveal();
     Object.values(o.triggers || {}).forEach(b => b && b.setAttribute("aria-expanded", "true"));
     render();
   }
@@ -231,7 +238,8 @@ function rangePicker(o) {
   Object.entries(o.triggers || {}).forEach(([k, b]) => b && b.addEventListener("click", e => {
     e.stopPropagation();
     if (!el.hidden && mode === k) return close(true);
-    el.hidden ? open(k) : (mode = k, render());
+    if (el.hidden) return open(k);
+    mode = k; render(); reveal();
   }));
   el.addEventListener("click", e => {
     e.stopPropagation();
@@ -265,11 +273,37 @@ function rangePicker(o) {
   return { open, close, render, isOpen: () => !el.hidden, el };
 }
 
+/* ---------- Scroll hint: edge fade + arrow buttons on a horizontal chip row ----------
+   Arrows/fades only show while there is more to scroll in that direction. */
+function scrollHint(sc) {
+  const wrap = document.createElement("div");
+  wrap.className = "sh";
+  sc.parentNode.insertBefore(wrap, sc); wrap.appendChild(sc);
+  const arrow = (dir, d) => `<button type="button" class="sh-btn sh-${dir}" aria-label="Scroll ${dir === "prev" ? "left" : "right"}" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg></button>`;
+  wrap.insertAdjacentHTML("beforeend", arrow("prev", "M15 6l-6 6 6 6") + arrow("next", "M9 6l6 6-6 6"));
+  const update = () => {
+    const max = sc.scrollWidth - sc.clientWidth;
+    wrap.classList.toggle("can-prev", sc.scrollLeft > 2);
+    wrap.classList.toggle("can-next", max > 2 && sc.scrollLeft < max - 2);
+  };
+  wrap.addEventListener("click", e => {
+    const b = e.target.closest(".sh-btn"); if (!b) return;
+    e.stopPropagation();
+    sc.scrollBy({ left: (b.classList.contains("sh-next") ? 1 : -1) * sc.clientWidth * .7, behavior: "smooth" });
+  });
+  sc.addEventListener("scroll", update, { passive: true });
+  new ResizeObserver(update).observe(sc);
+  new MutationObserver(update).observe(sc, { childList: true });
+  update();
+  return update;
+}
+
 /* ---------- Custom select: keeps the native <select> as the source of truth ----------
-   customSelect(select, { columns, search, placeholder })                                  */
+   customSelect(select, { columns, search, placeholder, label, item })
+   label(option) / item(option) return HTML for the button and menu rows (default: option text) */
 function customSelect(sel, o = {}) {
   const wrap = document.createElement("div");
-  wrap.className = "cs" + (o.columns ? " cs-grid" : "");
+  wrap.className = "cs" + (o.columns ? " cs-grid" : "") + (o.item ? " cs-rich" : "");
   sel.parentNode.insertBefore(wrap, sel); wrap.appendChild(sel);
   sel.classList.add("cs-native"); sel.tabIndex = -1; sel.setAttribute("aria-hidden", "true");
   const btn = document.createElement("button");
@@ -284,11 +318,11 @@ function customSelect(sel, o = {}) {
   const opts = () => [...sel.options].filter(x => x.value !== "");
   function paint() {
     const cur = sel.options[sel.selectedIndex];
-    btn.innerHTML = `<span class="${cur && cur.value ? "" : "ph"}">${cur && cur.value ? cur.text : (o.placeholder || cur?.text || "Select")}</span><svg class="cs-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
+    btn.innerHTML = `<span class="${cur && cur.value ? "" : "ph"}">${cur && cur.value ? (o.label ? o.label(cur) : cur.text) : (o.placeholder || cur?.text || "Select")}</span><svg class="cs-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>`;
   }
   function list(q = "") {
     const items = opts().filter(x => x.text.toLowerCase().includes(q.toLowerCase()));
-    menu.querySelector(".cs-list").innerHTML = items.length ? items.map((x, i) => `<button type="button" role="option" data-v="${x.value}" aria-selected="${x.value === sel.value}" class="${x.value === sel.value ? "on" : ""} ${i === focus ? "focus" : ""}">${x.text}</button>`).join("") : `<p class="cs-empty">No matches</p>`;
+    menu.querySelector(".cs-list").innerHTML = items.length ? items.map((x, i) => `<button type="button" role="option" data-v="${x.value}" aria-selected="${x.value === sel.value}" class="${x.value === sel.value ? "on" : ""} ${i === focus ? "focus" : ""}">${o.item ? o.item(x) : x.text}</button>`).join("") : `<p class="cs-empty">No matches</p>`;
   }
   menu.innerHTML = (o.search ? `<input class="cs-search" placeholder="Search…" aria-label="Search">` : "") + `<div class="cs-list"></div>`;
   const search = menu.querySelector(".cs-search");

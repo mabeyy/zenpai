@@ -50,7 +50,7 @@
 
   <main class="wrap list-layout">
     <aside class="filters" aria-label="Filters">
-      <div class="f-head"><button class="f-toggle" id="fToggle" type="button" aria-expanded="false"><h3>Filters</h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><button id="reset" type="button">Reset</button></div>
+      <div class="f-head"><button class="f-toggle" id="fToggle" type="button" aria-expanded="false"><span class="f-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg></span><h3>Filters</h3><svg class="f-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><button id="reset" type="button">Reset</button></div>
 
       <div class="f-sec">
         <h4>Rental term</h4>
@@ -142,10 +142,17 @@
 
     /* ---------- Search bar ---------- */
     const times = Array.from({ length: 29 }, (_, i) => { const m = 7 * 60 + i * 30; return `${String(m / 60 | 0).padStart(2, "0")}:${m % 60 ? "30" : "00"}`; });
-    $("sbLoc").innerHTML = LOCATIONS.map(l => `<option value="${l.id}">${l.name}${l.fee ? ` (+${usd(l.fee)})` : ""}</option>`).join("");
+    $("sbLoc").innerHTML = LOCATIONS.map(l => `<option value="${l.id}">${l.name}</option>`).join("");
+    const LOC_ICON = { hq: I.pin, iah: I.plane, delivery: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11" rx="1"/><path d="M15 9h4l3 4v4h-7"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>' };
+    const locOf = o => LOCATIONS.find(l => l.id === o.value);
+    const feeTag = l => l.fee ? `+${usd(l.fee)}` : "Free";
+    const locSel = customSelect($("sbLoc"), {
+      label: o => { const l = locOf(o); return `${l.name}${l.fee ? `<em>${feeTag(l)}</em>` : ""}`; },
+      item: o => { const l = locOf(o); return `<span class="lo-ico">${LOC_ICON[l.id]}</span><span class="lo-txt"><b>${l.name}</b><small>${l.detail}</small></span><span class="lo-fee ${l.fee ? "" : "free"}">${feeTag(l)}</span>`; },
+    });
     const short = s => fmtDate(s, { weekday: "short", month: "short", day: "numeric" });
     function fillSearch() {
-      $("sbLoc").value = trip.loc;
+      $("sbLoc").value = trip.loc; locSel.paint();
       $("sbStartVal").innerHTML = `${short(trip.start)}<em>${fmtTime(trip.stime)}</em>`;
       $("sbEndVal").innerHTML = `${short(trip.end)}<em>${fmtTime(trip.etime)}</em>`;
     }
@@ -164,6 +171,7 @@
     const TYPES = ["All", "SUV", "Sedan", "Truck"];
     const count = (k, v) => CARS.filter(c => c[k] === v).length;
     $("typeTabs").innerHTML = TYPES.map(t => `<button type="button" data-type="${t}" class="${t === "All" ? "on" : ""}">${t === "All" ? "All vehicles" : t + "s"} <em>${t === "All" ? CARS.length : count("type", t)}</em></button>`).join("");
+    scrollHint($("typeTabs"));
     $("typeTabs").addEventListener("click", e => {
       const b = e.target.closest("[data-type]"); if (!b) return;
       state.type = b.dataset.type;
@@ -255,7 +263,6 @@
     /* ---------- Cards ---------- */
     function cardHTML(c, i, days) {
       const rate = dayRate(c, days), avail = isAvailable(c, trip);
-      const total = rate * days;
       return `
       <article class="car-card ${avail ? "" : "unavailable"}" style="--i:${i}">
         <a class="cc-media" href="car.html?id=${c.id}&${tripQuery(trip)}" aria-label="${c.name} details">
@@ -280,12 +287,11 @@
             <span>${I.seat}${c.seats} seats</span>
             <span>${I.gear}Auto</span>
             <span>${I.fuel}${c.mpg[0]}/${c.mpg[1]} mpg</span>
-            <span>${I.bag}${c.cargo}</span>
+            <span>${I.bag}${c.cargo.replace(" cu ft", " ft³")}</span>
           </div>
           <div class="cc-foot">
             <div class="cc-price">
               <b>${usd(rate)}<small>/day</small></b>${rate < c.rate ? `<s>${usd(c.rate)}</s>` : ""}
-              <span>${avail ? `${usd(total)} total · ${days} day${days > 1 ? "s" : ""}` : ""}</span>
               ${avail ? "" : `<span class="cc-unavail">Booked for these dates</span>`}
             </div>
             <a class="btn btn-${avail ? "dark" : "ghost"} btn-sm" href="${avail ? `booking.html?id=${c.id}&${tripQuery(trip)}` : `car.html?id=${c.id}&${tripQuery(trip)}`}">${avail ? "Reserve" : "See dates"}</a>

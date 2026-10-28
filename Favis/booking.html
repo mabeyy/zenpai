@@ -34,7 +34,7 @@
               <div>
                 <span class="eyebrow" id="tripType"></span>
                 <h3 id="tripName" style="font-size:22px;margin:6px 0 8px"></h3>
-                <div class="cc-specs" id="tripSpecs"></div>
+                <div class="trip-specs" id="tripSpecs"></div>
               </div>
             </div>
             <div class="date-pair" id="datePair">
@@ -54,7 +54,7 @@
               <div class="seg ret-seg" id="retSeg" role="radiogroup" aria-label="Return location"></div>
             </div>
           </div>
-          <div class="step-actions"><a class="btn btn-ghost" id="backToCar" href="#">← Back to car</a><button class="btn btn-primary" data-next>Continue to protection</button></div>
+          <div class="step-actions"><a class="btn btn-ghost" id="backToCar" href="#">← Back<span class="m-hide"> to car</span></a><button class="btn btn-primary" data-next>Continue to protection</button></div>
         </section>
 
         <!-- STEP 2: Protection -->
@@ -236,7 +236,7 @@
     $("sumSub").textContent = `${car.color} · ${car.seats} seats · ${car.fuel}`;
     $("sumCarLink").href = `car.html?id=${car.id}&${tripQuery(trip)}`;
     document.querySelector(".sum-notes > div").innerHTML = document.querySelector(".sum-notes > div").innerHTML.replace("${shield}", I.shield);
-    $("tripSpecs").innerHTML = `<span>${I.seat}${car.seats} seats</span><span>${I.gear}Automatic</span><span>${I.fuel}${car.mpg[0]}/${car.mpg[1]} mpg</span><span>${I.bag}${car.cargo}</span>`;
+    $("tripSpecs").innerHTML = `<span>${I.seat}${car.seats} seats</span><span>${I.gear}Auto</span><span>${I.fuel}${car.mpg[0]}/${car.mpg[1]} mpg</span><span>${I.bag}${car.cargo.replace(" cu ft", " ft³")}</span>`;
 
     document.querySelectorAll(".dpi").forEach(x => x.innerHTML = I.cal); $("dpairArrow").innerHTML = I.arrow;
     const showDates = () => {

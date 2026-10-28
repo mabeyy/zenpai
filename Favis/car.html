@@ -29,7 +29,6 @@
             <div class="title-meta" id="meta"></div>
           </div>
           <div class="share-row">
-            <button class="icon-btn" id="saveBtn" aria-label="Save vehicle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
             <button class="icon-btn" id="shareBtn" aria-label="Share vehicle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>
           </div>
         </div>
@@ -150,10 +149,10 @@
     $("crumbName").textContent = car.name;
     $("eyebrow").innerHTML = `<i></i>${car.type} · ${car.color}`;
     $("title").textContent = car.name;
-    $("meta").innerHTML = `<span class="cc-rating">${stars(car.rating)}<span>(${car.trips} trips)</span></span><span class="dot"></span>
-      ${car.instant ? `<span class="chip chip-teal">${I.bolt} Instant book</span>` : `<span class="chip chip-gold">Approval within 2 hrs</span>`}
+    $("meta").innerHTML = `<span class="cc-rating">${stars(car.rating)}<span>(${car.trips}<span class="m-hide"> trips</span>)</span></span><span class="dot m-hide"></span>
+      ${car.instant ? `<span class="chip chip-teal">${I.bolt} Instant<span class="m-hide"> book</span></span>` : `<span class="chip chip-gold">Approval in 2 hrs</span>`}
       ${car.fuel === "Hybrid" ? `<span class="chip chip-teal">${I.leaf} Hybrid</span>` : ""}
-      ${car.airport ? `<span class="chip chip-gold">${I.plane} IAH pickup</span>` : ""}`;
+      ${car.airport ? `<span class="chip chip-gold">${I.plane} IAH<span class="m-hide"> pickup</span></span>` : ""}`;
 
     /* ---------- Gallery + lightbox ---------- */
     const P = car.photos;
@@ -338,8 +337,7 @@
     $("locList").innerHTML = LOCATIONS.map(l => `<div class="loc-row"><span class="li">${l.id === "iah" ? I.plane : I.pin}</span><p><b>${l.name}</b><small>${l.detail}</small></p><em>${l.id === "iah" && !car.airport ? "Not for this car" : l.fee ? "+" + usd(l.fee) : "Free"}</em></div>`).join("");
     ["pIco1", "pIco2", "pIco3", "pIco4"].forEach((id, i) => $(id).innerHTML = [I.user, I.shield, I.fuel, I.check][i]);
 
-    /* ---------- Save / share ---------- */
-    $("saveBtn").onclick = e => { e.currentTarget.classList.toggle("on"); toast(e.currentTarget.classList.contains("on") ? "Saved to your favorites" : "Removed from favorites"); };
+    /* ---------- Share ---------- */
     $("shareBtn").onclick = () => { navigator.clipboard?.writeText(location.href).catch(() => {}); toast("Link copied"); };
 
     /* ---------- Similar ---------- */
