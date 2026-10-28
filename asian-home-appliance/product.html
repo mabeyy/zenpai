@@ -12,12 +12,6 @@
   <div id="chrome-top"></div>
 
   <main class="container page-enter">
-    <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="index.html">Home</a><span>›</span>
-      <a href="index.html" id="crumbCat">Products</a><span>›</span>
-      <span id="crumbName"></span>
-    </nav>
-
     <section class="pdp">
       <!-- Gallery -->
       <div class="panel gallery">
@@ -81,7 +75,6 @@
           </div>
           <button class="btn btn-primary" id="addCart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>Add to Cart</button>
           <button class="btn btn-dark" id="buyNow">Buy Now</button>
-          <button class="wish-btn" id="wishBtn" aria-label="Add to wishlist"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
         </div>
 
         <div class="freebie">
@@ -226,10 +219,7 @@
     const d = discountOf(p);
     let price = p.price, was = p.was;
 
-    /* Breadcrumb + header info */
-    $("crumbCat").textContent = p.cat;
-    $("crumbCat").href = `index.html?cat=${encodeURIComponent(p.cat)}`;
-    $("crumbName").textContent = p.name.split(" ").slice(0, 5).join(" ") + "…";
+    /* Header info */
     $("brand").textContent = p.brand;
     $("warrantyBrand").textContent = p.brand;
     $("name").textContent = p.name;
@@ -318,13 +308,10 @@
     $("plus").onclick = () => qty.value = clamp(+qty.value + 1);
     qty.onchange = () => qty.value = clamp(+qty.value);
 
-    /* Cart / buy / wishlist */
+    /* Cart / buy */
     $("addCart").onclick = e => addToCart(p, e.currentTarget, +qty.value);
     $("stickyAdd").onclick = e => addToCart(p, e.currentTarget, +qty.value);
     $("buyNow").onclick = () => toast("Proceeding to secure checkout…");
-    const wishBtn = $("wishBtn");
-    wishBtn.classList.toggle("on", wishlist().includes(p.id));
-    wishBtn.onclick = () => toggleWish(p.id, wishBtn);
 
     /* Delivery ETA + branch stock */
     const eta = new Date(); eta.setDate(eta.getDate() + 3);

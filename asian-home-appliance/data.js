@@ -184,7 +184,6 @@ function cardHTML(p, i = 0) {
       ${p.stock < 10 ? `<span class="stock low"><span class="dot"></span>Only ${p.stock} left</span>` : ""}
     </a>
     <div class="card-actions">
-      <button class="act wish ${wishlist().includes(p.id) ? "on" : ""}" aria-label="Add to wishlist" data-wish="${p.id}">${ICON.heart}</button>
       <button class="act" data-quick="${p.id}" aria-label="Quick view">${ICON.eye}</button>
     </div>
     <div class="card-body">
@@ -210,6 +209,21 @@ const cartItems = () => { const v = store("aha-cart-items", []); return Array.is
 const cartCount = () => cartItems().reduce((n, x) => n + x.qty, 0);
 const FREE_DELIVERY = 10000;
 const wishlist = () => store("aha-wish", []);
+
+/* Promo bar under the header (Shopee-style campaign links) */
+const PI = d => `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const PROMO_NAV = [
+  ["index.html?tag=hot", "Hot Deals", `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 1-3s0 3 2 3c0-4 2-10 2-10z"/></svg>`, "hot"],
+  ["index.html?tag=sale", "Flash Sale", PI('<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>')],
+  ["index.html?tag=free", "Free Delivery", PI('<path d="M1 3h15v13H1zM16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>')],
+  ["#", "Coin Rewards", PI('<circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.4 0-2.5.8-2.5 2s1 1.6 2.5 2 2.5.8 2.5 2-1.1 2-2.5 2c-1 0-2-.5-2.5-1.5M12 6.5v1.5M12 16v1.5"/>')],
+  ["#", "Vouchers", PI('<path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z"/><path d="M9 9h.01M15 15h.01M15 9l-6 6"/>')],
+  ["#", "0% Installment", PI('<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>')],
+  ["#", "Buy Now, Pay Later", PI('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')],
+  ["#", "Bundle Deals", PI('<path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7S10 2 7.5 3 9 7 12 7zM12 7s2-5 4.5-4S15 7 12 7z"/>')],
+  ["index.html?tag=new", "New Arrivals", PI('<path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/>')],
+  ["#", "Store Pickup", PI('<path d="M3 9l1.5-5h15L21 9M3 9v11h18V9M3 9h18M9 20v-6h6v6"/>')],
+];
 
 /* ---------- Shared header + footer ---------- */
 function renderChrome(activeCat) {
@@ -246,17 +260,27 @@ function renderChrome(activeCat) {
       </form>
       <div class="header-actions">
         <a class="icon-btn" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-6.5-8-13a8 8 0 0 1 16 0c0 6.5-8 13-8 13z"/><circle cx="12" cy="9" r="3"/></svg><span class="lbl"><small>Find a</small>Branch</span></a>
-        <a class="icon-btn" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span class="lbl"><small>Hello, Sign in</small>Account</span></a>
-        <a class="icon-btn" href="#" aria-label="Wishlist"><span class="ib"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span class="badge-count" id="wishCount">${wishlist().length}</span></span></a>
-        <a class="icon-btn" href="#" id="cartIcon"><span class="ib"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg><span class="badge-count" id="cartCount">${cartCount()}</span></span><span class="lbl"><small>My</small>Cart</span></a>
+        <span class="ha-sep" aria-hidden="true"></span>
+        <a class="icon-btn icon-only" href="#" id="cartIcon" aria-label="My Cart"><span class="ib"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg><span class="badge-count" id="cartCount">${cartCount()}</span></span></a>
+        <div class="acct">
+          <button class="icon-btn icon-only" type="button" aria-label="Account" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></button>
+          <div class="acct-menu">
+            <p class="acct-hello">Hello! Welcome to Asian Home Appliance</p>
+            <div class="acct-cta"><a href="#" class="acct-login">Login</a><a href="#" class="acct-signup">Sign Up</a></div>
+            <ul>
+              <li><a href="#">My Account</a></li>
+              <li><a href="#">Track My Order</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-    <nav class="cat-nav"><ul class="container">
-      <li><a href="index.html?tag=hot" class="hot"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 1-3s0 3 2 3c0-4 2-10 2-10z"/></svg>Hot Deals</a></li>
-      <li><a href="index.html" class="${!activeCat ? "active" : ""}">All Products</a></li>
-      ${CATEGORIES.map(c => `<li><a href="index.html?cat=${encodeURIComponent(c)}" class="${activeCat === c ? "active" : ""}">${c}</a></li>`).join("")}
-      <li><a href="#">Stores</a></li>
-      <li><a href="#">Customer Inquiry</a></li>
+    <nav class="cat-nav" aria-label="Promos"><ul class="container">
+      ${PROMO_NAV.map(([href, label, icon, cls]) => {
+        const tag = new URLSearchParams(href.split("?")[1] || "").get("tag");
+        const on = !!tag && new URLSearchParams(location.search).get("tag") === tag;
+        return `<li><a href="${href}" class="${cls || ""}${on ? " active" : ""}"${tag ? ` data-tag="${tag}"` : ""}>${icon}${label}</a></li>`;
+      }).join("")}
     </ul></nav>
   </header>`;
 
@@ -569,7 +593,6 @@ function openQuickView(id) {
       </ul>
       <div class="qv-actions">
         <button class="add-btn" data-add="${p.id}">${ICON.cart}<span>Add to Cart</span></button>
-        <button class="act-sq wish ${wishlist().includes(p.id) ? "on" : ""}" data-wish="${p.id}" aria-label="Add to wishlist">${ICON.heart}</button>
       </div>
       <a class="qv-more" href="product.html?id=${p.id}">View full details →</a>
     </div>`;

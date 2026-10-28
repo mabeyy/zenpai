@@ -12,10 +12,6 @@
   <div id="chrome-top"></div>
 
   <main class="container page-enter">
-    <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="index.html">Home</a><span>›</span><span id="crumbCat">All Products</span>
-    </nav>
-
     <!-- Flash sale hero -->
     <section class="plp-hero">
       <div class="hero-copy">
@@ -44,6 +40,7 @@
 
     <!-- Category tiles -->
     <section class="cat-tiles" id="catTiles"></section>
+    <div class="tiles-scroll" id="tilesScroll" aria-hidden="true"><span></span></div>
 
 
     <!-- Flash deals -->
@@ -167,7 +164,6 @@
         </div>
         <div class="active-chips" id="chips"></div>
         <div class="grid" id="grid"></div>
-        <div class="pagination" id="pager"></div>
       </div>
     </section>
   </main>
@@ -205,9 +201,7 @@
       minRating: 0,
       sort: "pop",
       q: (params.get("q") || "").toLowerCase(),
-      page: 1,
     };
-    const PER_PAGE = 12;
     const TAG_LABEL = { sale: "On Sale", hot: "Hot Items", new: "New Arrivals", free: "Free Delivery" };
 
     renderChrome(params.get("cat"));
@@ -239,15 +233,26 @@
     /* Category tiles */
     const tiles = document.getElementById("catTiles");
     tiles.innerHTML = [["all", "All"], ...CATEGORIES.map(c => [c, c.replace(" Appliances", "").replace("Washing Machines", "Washers").replace("Air Conditioners", "Aircons")])]
-      .map(([key, label]) => `<button class="cat-tile" data-tile="${key}"><span class="ico">${CAT_ICON[key]}</span>${label}</button>`).join("")
-      + `<button class="cat-tile more" id="openCats" aria-haspopup="dialog"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1.8"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1.8"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1.8"/><path d="M17.25 14v6.5M14 17.25h6.5"/></svg></span>View all</button>`;
+      .map(([key, label]) => `<button class="cat-tile" data-tile="${key}"><span class="ico">${CAT_ICON[key]}</span>${label}</button>`).join("");
     tiles.addEventListener("click", e => {
-      if (e.target.closest("#openCats")) return openCatModal();
       const t = e.target.closest("[data-tile]"); if (!t) return;
       state.cats.clear();
       if (t.dataset.tile !== "all") state.cats.add(t.dataset.tile);
       syncChecks(); update(true);
     });
+    /* Shopee-style scroll indicator: thumb width = visible share, position = scroll progress */
+    const bar = document.getElementById("tilesScroll"), thumb = bar.firstElementChild;
+    function syncTilesBar() {
+      const { scrollWidth: sw, clientWidth: cw, scrollLeft: sl } = tiles;
+      bar.hidden = sw <= cw + 1;
+      if (bar.hidden) return;
+      const w = cw / sw * 100;
+      thumb.style.width = w + "%";
+      thumb.style.transform = `translateX(${sl / (sw - cw) * (100 / w * (100 - w))}%)`;
+    }
+    tiles.addEventListener("scroll", syncTilesBar, { passive: true });
+    addEventListener("resize", syncTilesBar);
+    syncTilesBar();
 
     /* All-categories modal: compact icon list (appliance categories + sample in-store departments) */
     const ico = paths => `<svg viewBox="0 0 24 24" fill="none" stroke="#e30b0e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
@@ -341,12 +346,8 @@
       document.querySelectorAll("[data-group]").forEach(i => i.checked = state[i.dataset.group].has(i.value));
       const active = state.cats.size === 1 ? [...state.cats][0] : state.cats.size ? null : "all";
       document.querySelectorAll(".cat-tile").forEach(t => t.classList.toggle("active", t.dataset.tile === active));
-      document.querySelectorAll(".cat-nav a").forEach(a => {
-        const c = new URL(a.href).searchParams.get("cat");
-        a.classList.toggle("active", c ? state.cats.size === 1 && state.cats.has(c) : a.textContent.trim() === "All Products" && state.cats.size === 0);
-      });
+      document.querySelectorAll(".cat-nav [data-tag]").forEach(a => a.classList.toggle("active", state.tags.size === 1 && state.tags.has(a.dataset.tag)));
       document.querySelectorAll(".brand-logo").forEach(b => b.classList.toggle("on", state.brands.has(b.dataset.brand)));
-      document.getElementById("crumbCat").textContent = state.cats.size === 1 ? [...state.cats][0] : "All Products";
     }
 
     document.getElementById("filters").addEventListener("change", e => {
@@ -443,7 +444,6 @@
     /* Filter + sort + render */
     let loadTimer;
     function update(scroll) {
-      state.page = 1;
       renderChips();
       const grid = document.getElementById("grid");
       grid.innerHTML = Array.from({ length: 4 }, () => `<div class="skeleton sk-card"></div>`).join("");
@@ -465,21 +465,11 @@
     }
     function render() {
       const list = results();
-      const pages = Math.max(1, Math.ceil(list.length / PER_PAGE));
-      const slice = list.slice((state.page - 1) * PER_PAGE, state.page * PER_PAGE);
       document.getElementById("count").textContent = list.length;
-      document.getElementById("grid").innerHTML = slice.length
-        ? slice.map(cardHTML).join("")
+      document.getElementById("grid").innerHTML = list.length
+        ? list.map(cardHTML).join("")
         : `<div class="empty"><b>No products match your filters</b>Try removing a filter or widening the price range.</div>`;
-      document.getElementById("pager").innerHTML = pages > 1
-        ? Array.from({ length: pages }, (_, i) => `<button class="${i + 1 === state.page ? "on" : ""}" data-page="${i + 1}">${i + 1}</button>`).join("")
-        : "";
     }
-    document.getElementById("pager").addEventListener("click", e => {
-      const b = e.target.closest("[data-page]"); if (!b) return;
-      state.page = +b.dataset.page; render();
-      document.querySelector(".plp").scrollIntoView({ block: "start" });
-    });
 
     syncChecks();
     update();
